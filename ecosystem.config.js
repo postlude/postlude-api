@@ -13,7 +13,7 @@ module.exports = {
         log_date_format: 'YYYY-MM-DD HH:mm:ss',
         out_file: './logs/pm2_out.log',
         error_file: './logs/pm2_err.log'
-    }],
+    }]
     // deploy: {
     //     production: {
     //         user: 'SSH_USERNAME',
