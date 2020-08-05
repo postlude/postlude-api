@@ -3,7 +3,7 @@
  */
 
 exports.RSPNS = {
-    SUCCES: 1000,
-    FAIL: 2000,
-    FAIL_INVLD_FIELD: 2001
+    SUCCES: { code: 1000 },
+    FAIL: { code: 2000 },
+    FAIL_INVLD_FIELD: { code: 2001 }
 };
