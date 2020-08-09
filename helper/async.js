@@ -22,7 +22,7 @@ exports.syncAryPrll = async (ary, func, arg) => {
         }
     } catch (err) {
         console.error('[async] syncAryPrll - ERROR');
-        throw new Error(err);
+        throw err;
     }
 };
 
@@ -44,6 +44,6 @@ exports.syncAryOrdr = async (ary, func, arg) => {
         }
     } catch (err) {
         console.error('[async] syncAryOrdr - ERROR');
-        throw new Error(err);
+        throw err;
     }
 };

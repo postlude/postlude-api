@@ -17,8 +17,47 @@ exports.addCmd = async (req, res) => {
 
         if (mainCmd) {
             conn = await MYSQL.getConn();
+            await conn.beginTransaction();
 
             await MAIN_CMD_SVC.addCmd({ conn, mainCmd, subCmdList });
+
+            conn.commit();
+            res.send(RSPNS.SUCCES);
+        } else {
+            res.send(RSPNS.FAIL_INVLD_FIELD);
+        }
+    } catch (err) {
+        if (conn) {
+            conn.rollback();
+        }
+        if (err instanceof CstmErr) {
+            console.error(err.msg);
+            res.send(err.rspns);
+        } else {
+            console.error(err);
+            res.send(RSPNS.FAIL);
+        }
+    } finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+};
+
+/**
+ * @description 명령어 수정
+ */
+exports.modifyCmd = async (req, res) => {
+    let conn = null;
+
+    try {
+        const { mainCmd, subCmdList } = req.body;
+
+        if (mainCmd) {
+            conn = await MYSQL.getConn();
+            await conn.beginTransaction();
+
+            await MAIN_CMD_SVC.modifyCmd({ conn, mainCmd, subCmdList });
 
             conn.commit();
             res.send(RSPNS.SUCCES);

@@ -5,7 +5,7 @@
 const MAIN_CMD = require('../query/main_cmd');
 
 /**
- * @description 메인 명령어 insert
+ * @description 메인 명령어 1개 INSERT
  * @param {Object} arg { conn, mainCmd }
  * @returns {number} mainCmdIdx
  */
@@ -17,6 +17,20 @@ const insert1 = async (arg) => {
     return insertId;
 };
 
+/**
+ * @description 메인 명령어 인덱스로 UPDATE
+ * @param {Object} arg { conn, mainCmd }
+ * @returns {number} affectedRows
+ */
+const update1 = async (arg) => {
+    const { conn, mainCmd } = arg;
+
+    const [{ affectedRows }] = await conn.execute(MAIN_CMD.update1, mainCmd);
+
+    return affectedRows;
+};
+
 module.exports = {
-    insert1
+    insert1,
+    update1
 };

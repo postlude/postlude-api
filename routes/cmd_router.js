@@ -6,6 +6,7 @@ const router = require('express').Router();
 const CMD_CNTLR = require('@/application/cmd/cmd_cntlr');
 
 router.route('/')
-    .post(CMD_CNTLR.addCmd);
+    .post(CMD_CNTLR.addCmd)
+    .put(CMD_CNTLR.modifyCmd);
 
 module.exports = router;
