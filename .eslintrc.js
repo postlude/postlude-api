@@ -12,9 +12,7 @@ const eslint = {
         'eslint:recommended'
     ],
     globals: {
-        Define: true,
-        ENV: true,
-        CustomError: true
+        CstmErr: true
     },
     rules: {
         'import/no-dynamic-require': 0, // 다이나믹 require 허용
