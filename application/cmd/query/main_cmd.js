@@ -16,6 +16,31 @@ const insert1 = `
 
 /* ================================================== [SELECT] ================================================== */
 
+const select1 = `
+    SELECT
+        IDX AS idx,
+        CMD AS cmd,
+        RGST_DT AS rgstDt,
+        UPDT_DT AS updtDt
+    FROM
+        MAIN_CMD
+    WHERE
+        CMD LIKE :cmd
+    ORDER BY
+        CMD ASC
+    LIMIT
+        :offset, :limit
+`;
+
+const select2 = `
+    SELECT
+        COUNT(*) AS cnt
+    FROM
+        MAIN_CMD
+    WHERE
+        CMD LIKE :cmd
+`;
+
 /* ================================================== [UPDATE] ================================================== */
 
 const update1 = `
@@ -34,5 +59,7 @@ const update1 = `
 
 module.exports = {
     insert1,
+    select1,
+    select2,
     update1
 };

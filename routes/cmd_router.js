@@ -9,4 +9,7 @@ router.route('/')
     .post(CMD_CNTLR.addCmd)
     .put(CMD_CNTLR.modifyCmd);
 
+router.route('/list')
+    .get(CMD_CNTLR.getCmdList);
+
 module.exports = router;

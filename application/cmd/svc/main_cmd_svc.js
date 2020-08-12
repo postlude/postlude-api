@@ -74,3 +74,27 @@ exports.modifyCmd = async (arg) => {
         throw new CstmErr('[main_cmd_svc] modifyCmd - MAIN CMD UPDATE FAIL', RSPNS.FAIL_QUERY_EXEC);
     }
 };
+
+/**
+ * @description 메인 명령어 검색
+ * @param {Object} arg { conn, numPage, mainCmd }
+ * @returns {Object} { totCnt, mainCmdList }
+ */
+exports.getMainCmdList = async (arg) => {
+    const { conn, numPage, mainCmd } = arg;
+
+    const limit = 10;
+    const offset = (numPage - 1) * limit;
+
+    const totCnt = await MAIN_CMD.select2({ conn, mainCmd });
+
+    if (totCnt) {
+        const mainCmdList = await MAIN_CMD.select1({
+            conn, mainCmd, offset, limit
+        });
+
+        return { totCnt, mainCmdList };
+    } else {
+        return { totCnt };
+    }
+};
