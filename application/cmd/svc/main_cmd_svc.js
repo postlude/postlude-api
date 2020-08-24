@@ -2,9 +2,10 @@
  * @fileoverview application/cmd/svc/main_cmd_svc.js
  */
 
-const { RSPNS } = require('@/config/define');
+const { RSPNS, OPTN_TY } = require('@/config/define');
 const MAIN_CMD = require('../exec/main_cmd');
 const SUB_CMD = require('../exec/sub_cmd');
+const OPTN_SVC = require('./optn_svc');
 
 /**
  * @description 서브 명령어 BULK INSERT
@@ -32,19 +33,24 @@ const addSubCmd = async (arg) => {
 
 /**
  * @description 명령어 신규 저장
- * @param {Object} arg { conn, mainCmd, subCmdList }
+ * @param {Object} arg { conn, mainCmd, optnList }
  */
-exports.addCmd = async (arg) => {
-    const { conn, mainCmd, subCmdList } = arg;
+exports.addMainCmd = async (arg) => {
+    const { conn, mainCmd, optnList } = arg;
 
     const mainCmdIdx = await MAIN_CMD.insert1({ conn, mainCmd });
 
     if (mainCmdIdx) {
-        if (Array.isArray(subCmdList) && subCmdList.length) {
-            await addSubCmd({ conn, mainCmdIdx, subCmdList });
+        if (Array.isArray(optnList) && optnList.length) {
+            await OPTN_SVC.addMltplOptn({
+                conn,
+                ty: OPTN_TY.MAIN_CMD,
+                cmdIdx: mainCmdIdx,
+                optnList
+            });
         }
     } else {
-        throw new CstmErr('[main_cmd_svc] addCmd - MAIN CMD INSERT FAIL', RSPNS.FAIL_QUERY_EXEC);
+        throw new CstmErr('[main_cmd_svc] addMainCmd - MAIN CMD INSERT FAIL', RSPNS.FAIL_QUERY_EXEC);
     }
 };
 

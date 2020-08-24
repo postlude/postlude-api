@@ -8,3 +8,8 @@ exports.RSPNS = {
     FAIL_INVLD_FIELD: { code: 2001 },
     FAIL_QUERY_EXEC: { code: 2002 }
 };
+
+exports.OPTN_TY = {
+    MAIN_CMD: 1,
+    SUB_CMD: 2
+};
