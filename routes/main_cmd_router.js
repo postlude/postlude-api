@@ -7,12 +7,12 @@ const MAIN_CMD_CNTLR = require('@/application/cmd/cntlr/main_cmd_cntlr');
 
 router.route('/')
     .post(MAIN_CMD_CNTLR.addMainCmd)
-    .put(MAIN_CMD_CNTLR.modifyCmd);
+    .put(MAIN_CMD_CNTLR.modifyMainCmd);
 
 router.route('/list')
-    .get(MAIN_CMD_CNTLR.getCmdList);
+    .get(MAIN_CMD_CNTLR.getMainCmdList);
 
 router.route('/:idx')
-    .get(MAIN_CMD_CNTLR.getCmd);
+    .get(MAIN_CMD_CNTLR.getMainCmd);
 
 module.exports = router;

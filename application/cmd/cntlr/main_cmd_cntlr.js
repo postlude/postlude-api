@@ -7,7 +7,7 @@ const { RSPNS } = require('@/config/define');
 const MAIN_CMD_SVC = require('../svc/main_cmd_svc');
 
 /**
- * @description 명령어 저장 API
+ * @description 메인 명령어 저장 API
  */
 exports.addMainCmd = async (req, res) => {
     let conn = null;
@@ -45,19 +45,19 @@ exports.addMainCmd = async (req, res) => {
 };
 
 /**
- * @description 명령어 수정 API
+ * @description 메인 명령어 수정 API
  */
-exports.modifyCmd = async (req, res) => {
+exports.modifyMainCmd = async (req, res) => {
     let conn = null;
 
     try {
-        const { mainCmd, subCmdList } = req.body;
+        const { mainCmd, optnList } = req.body;
 
         if (mainCmd) {
             conn = await MYSQL.getConn();
             await conn.beginTransaction();
 
-            await MAIN_CMD_SVC.modifyCmd({ conn, mainCmd, subCmdList });
+            await MAIN_CMD_SVC.modifyMainCmd({ conn, mainCmd, optnList });
 
             conn.commit();
             res.send(RSPNS.SUCCES);
@@ -83,9 +83,9 @@ exports.modifyCmd = async (req, res) => {
 };
 
 /**
- * @description 명령어 검색 API
+ * @description 메인 명령어 검색 API
  */
-exports.getCmdList = async (req, res) => {
+exports.getMainCmdList = async (req, res) => {
     let conn = null;
 
     try {
@@ -120,7 +120,7 @@ exports.getCmdList = async (req, res) => {
     }
 };
 
-exports.getCmd = async (req, res) => {
+exports.getMainCmd = async (req, res) => {
     let conn = null;
 
     try {

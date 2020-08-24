@@ -6,6 +6,7 @@ const { RSPNS, OPTN_TY } = require('@/config/define');
 const MAIN_CMD = require('../exec/main_cmd');
 const SUB_CMD = require('../exec/sub_cmd');
 const OPTN_SVC = require('./optn_svc');
+const OPTN = require('../exec/optn');
 
 /**
  * @description 서브 명령어 BULK INSERT
@@ -32,7 +33,7 @@ const addSubCmd = async (arg) => {
 };
 
 /**
- * @description 명령어 신규 저장
+ * @description 메인 명령어 신규 저장
  * @param {Object} arg { conn, mainCmd, optnList }
  */
 exports.addMainCmd = async (arg) => {
@@ -55,29 +56,38 @@ exports.addMainCmd = async (arg) => {
 };
 
 /**
- * @description 명령어 수정
- * @param {Object} arg { conn, mainCmd, subCmdList }
+ * @description 메인 명령어 수정
+ * @param {Object} arg { conn, mainCmd, optnList }
  */
-exports.modifyCmd = async (arg) => {
-    const { conn, mainCmd, subCmdList } = arg;
+exports.modifyMainCmd = async (arg) => {
+    const { conn, mainCmd, optnList } = arg;
 
     // [STEP 1] 메인 명령어 수정
     const afctdRows = await MAIN_CMD.update1({ conn, mainCmd });
 
     if (afctdRows === 1) {
-        if (Array.isArray(subCmdList)) {
+        if (Array.isArray(optnList)) {
             const { idx: mainCmdIdx } = mainCmd;
 
-            // [STEP 2] 메인 명령어에 연결된 서브 명령어 전체 삭제
-            await SUB_CMD.delete1({ conn, mainCmdIdx });
+            // [STEP 2] 메인 명령어에 연결된 옵션 전체 삭제
+            await OPTN.delete1({
+                conn,
+                ty: OPTN_TY.MAIN_CMD,
+                cmdIdx: mainCmdIdx
+            });
 
-            // [STEP 3] 신규 서브 명령어 BULK INSERT
-            if (subCmdList.length) {
-                await addSubCmd({ conn, mainCmdIdx, subCmdList });
+            // [STEP 3] 신규 옵션 BULK INSERT
+            if (optnList.length) {
+                await OPTN_SVC.addMltplOptn({
+                    conn,
+                    ty: OPTN_TY.MAIN_CMD,
+                    cmdIdx: mainCmdIdx,
+                    optnList
+                });
             }
         }
     } else {
-        throw new CstmErr('[main_cmd_svc] modifyCmd - MAIN CMD UPDATE FAIL', RSPNS.FAIL_QUERY_EXEC);
+        throw new CstmErr('[main_cmd_svc] modifyMainCmd - MAIN CMD UPDATE FAIL', RSPNS.FAIL_QUERY_EXEC);
     }
 };
 

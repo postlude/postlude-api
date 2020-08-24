@@ -17,6 +17,17 @@ const insert1 = async (arg) => {
     return affectedRows;
 };
 
+/**
+ * @description 명령어 타입과 인덱스에 해당하는 옵션 전부 삭제
+ * @param {Object} arg { conn, ty, cmdIdx }
+ */
+const delete1 = async (arg) => {
+    const { conn, ty, cmdIdx } = arg;
+
+    await conn.query(OPTN.delete1, { ty, cmdIdx });
+};
+
 module.exports = {
-    insert1
+    insert1,
+    delete1
 };

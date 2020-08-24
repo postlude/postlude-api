@@ -2,6 +2,9 @@
  * @fileoverview config/define.js
  */
 
+/**
+ * @description response 코드
+ */
 exports.RSPNS = {
     SUCCES: { code: 1000 },
     FAIL: { code: 2000 },
@@ -9,6 +12,9 @@ exports.RSPNS = {
     FAIL_QUERY_EXEC: { code: 2002 }
 };
 
+/**
+ * @description 옵션 타입
+ */
 exports.OPTN_TY = {
     MAIN_CMD: 1,
     SUB_CMD: 2
