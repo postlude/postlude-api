@@ -120,6 +120,9 @@ exports.getMainCmdList = async (req, res) => {
     }
 };
 
+/**
+ * @description 메인 명령어 1개 로드 API
+ */
 exports.getMainCmd = async (req, res) => {
     let conn = null;
 
@@ -131,11 +134,11 @@ exports.getMainCmd = async (req, res) => {
         if (Number.isFinite(mainCmdIdx)) {
             conn = await MYSQL.getConn();
 
-            const mainCmd = await MAIN_CMD_SVC.getCmdByIdx({ conn, mainCmdIdx });
+            const result = await MAIN_CMD_SVC.getMainCmdByIdx({ conn, mainCmdIdx });
 
             res.send({
                 ...RSPNS.SUCCES,
-                mainCmd
+                ...result
             });
         } else {
             res.send(RSPNS.FAIL_INVLD_FIELD);

@@ -114,3 +114,54 @@ exports.getMainCmdList = async (arg) => {
         return { totCnt };
     }
 };
+
+/**
+ * @description 메인 명령어 + 옵션 로드
+ * @param {Object} arg { conn, mainCmdIdx }
+ * @returns {Object} { mainCmd, optnList }
+ */
+exports.getMainCmdByIdx = async (arg) => {
+    const { conn, mainCmdIdx } = arg;
+
+    const mainCmdList = await MAIN_CMD.select3({ conn, mainCmdIdx });
+
+    if (mainCmdList.length) {
+        const {
+            cmd, dc, frmt, ex, rgstDt, updtDt
+        } = mainCmdList[0];
+
+        const optnList = [];
+        mainCmdList.forEach((optn) => {
+            const {
+                optnIdx, cmdOptn, optnDc, optnFrmt, optnEx
+            } = optn;
+
+            if (optnIdx) {
+                optnList.push({
+                    idx: optnIdx,
+                    cmdOptn,
+                    dc: optnDc,
+                    frmt: optnFrmt,
+                    ex: optnEx
+                });
+            }
+        });
+
+        return {
+            mainCmd: {
+                cmd,
+                dc,
+                frmt,
+                ex,
+                rgstDt,
+                updtDt
+            },
+            optnList
+        };
+    } else {
+        throw new CstmErr(
+            '[main_cmd_svc] getMainCmdByIdx - NOT EXISTED MAIN CMD',
+            RSPNS.FAIL_NOT_EXISTED_DATA
+        );
+    }
+};

@@ -50,6 +50,19 @@ const select2 = async (arg) => {
 };
 
 /**
+ * @description 인덱스로 메인 명령어 + 옵션 로드
+ * @param {Object} arg { conn, mainCmdIdx }
+ * @returns {Array}
+ */
+const select3 = async (arg) => {
+    const { conn, mainCmdIdx } = arg;
+
+    const [result] = await conn.execute(MAIN_CMD.select3, { mainCmdIdx });
+
+    return result;
+};
+
+/**
  * @description 메인 명령어 인덱스로 UPDATE
  * @param {Object} arg { conn, mainCmd }
  * @returns {number} affectedRows
@@ -66,5 +79,6 @@ module.exports = {
     insert1,
     select1,
     select2,
+    select3,
     update1
 };
