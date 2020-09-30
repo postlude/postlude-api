@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 app.use(morgan(logFrmt));
 
 app.use('/main-cmd', require('@/routes/main_cmd_router'));
+app.use('/dev-doc', require('@/routes/dev_doc_router'));
 
 app.listen(port, async () => {
     console.log('==================== [MyCmd WAS] ====================');

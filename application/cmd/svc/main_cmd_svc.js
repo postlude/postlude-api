@@ -2,7 +2,7 @@
  * @fileoverview application/cmd/svc/main_cmd_svc.js
  */
 
-const { RSPNS, OPTN_TY } = require('@/config/define');
+const { RSPNS, OPTN_TY } = require('@/config/dfn');
 const MAIN_CMD = require('../exec/main_cmd');
 const SUB_CMD = require('../exec/sub_cmd');
 const OPTN_SVC = require('./optn_svc');

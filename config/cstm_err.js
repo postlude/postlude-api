@@ -23,7 +23,7 @@ module.exports = class CstmErr extends Error {
     get rspns() {
         return {
             ...this.errRspns,
-            ...this.errObj
+            err: this.errObj
         };
     }
 };

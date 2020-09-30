@@ -1,5 +1,5 @@
 /**
- * @fileoverview config/define.js
+ * @fileoverview config/dfn.js
  */
 
 /**

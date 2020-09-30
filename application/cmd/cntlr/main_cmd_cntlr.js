@@ -3,7 +3,7 @@
  */
 
 const MYSQL = require('@/config/mysql');
-const { RSPNS } = require('@/config/define');
+const { RSPNS } = require('@/config/dfn');
 const MAIN_CMD_SVC = require('../svc/main_cmd_svc');
 
 /**

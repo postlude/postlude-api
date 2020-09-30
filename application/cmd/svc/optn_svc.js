@@ -2,7 +2,7 @@
  * @fileoverview application/cmd/svc/optn_svc.js
  */
 
-const { RSPNS } = require('@/config/define');
+const { RSPNS } = require('@/config/dfn');
 const OPTN = require('../exec/optn');
 
 /**
