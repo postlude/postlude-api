@@ -14,6 +14,17 @@ const insert1 = async (arg) => {
     await conn.query(DEV_DOC_TAG_LNK.insert1, [row]);
 };
 
+/**
+ * @description 개발 문서 인덱스로 연결 삭제
+ * @param {Object} arg { conn, devDocIdx }
+ */
+const delete1 = async (arg) => {
+    const { conn, devDocIdx } = arg;
+
+    await conn.execute(DEV_DOC_TAG_LNK.delete1, { devDocIdx });
+};
+
 module.exports = {
-    insert1
+    insert1,
+    delete1
 };

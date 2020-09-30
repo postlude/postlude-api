@@ -34,3 +34,15 @@ exports.addDoc = async (arg) => {
 
     await bulkSaveTagLnk({ conn, devDocIdx, tagIdxAry });
 };
+
+/**
+ * @description 개발 문서 삭제
+ * @param {Object} arg { conn, devDocIdx }
+ */
+exports.rmDoc = async (arg) => {
+    const { conn, devDocIdx } = arg;
+
+    await DEV_DOC_TAG_LNK.delete1({ conn, devDocIdx });
+
+    await DEV_DOC.delete1({ conn, devDocIdx });
+};

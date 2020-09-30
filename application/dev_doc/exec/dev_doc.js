@@ -17,6 +17,17 @@ const insert1 = async (arg) => {
     return insertId;
 };
 
+/**
+ * @description 개발 문서 1개 삭제
+ * @param {Object} arg { conn, devDocIdx }
+ */
+const delete1 = async (arg) => {
+    const { conn, devDocIdx } = arg;
+
+    await conn.execute(DEV_DOC.delete1, { idx: devDocIdx });
+};
+
 module.exports = {
-    insert1
+    insert1,
+    delete1
 };
