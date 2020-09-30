@@ -9,6 +9,9 @@ router.route('/')
     .post(DEV_DOC_CNTLR.addDoc)
     .put(DEV_DOC_CNTLR.modifyDoc);
 
+router.route('/list')
+    .get(DEV_DOC_CNTLR.getDocList);
+
 router.route('/:idx')
     .delete(DEV_DOC_CNTLR.rmDoc);
 

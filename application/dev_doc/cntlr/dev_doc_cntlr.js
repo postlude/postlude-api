@@ -106,3 +106,67 @@ exports.modifyDoc = async (req, res) => {
         }
     }
 };
+
+/**
+ * @description 문서 검색시 파라미터 체크
+ * 제목 검색은 3자 이상부터 가능
+ * @param {Object} arg { numPage, ty, title, tag }
+ * @returns {boolean}
+ */
+const chckParam = (arg) => {
+    const {
+        numPage, ty, title, tag
+    } = arg;
+
+    if (Number.isFinite(numPage)
+        && (
+            (ty === '1' && tag)
+            || (ty === '2' && title && title.length > 2)
+        )
+    ) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+/**
+ * @description 개발 문서 검색 API
+ */
+exports.getDocList = async (req, res) => {
+    let conn = null;
+
+    try {
+        const {
+            page, ty, title, tag
+        } = req.query;
+
+        const numPage = parseInt(page, 10);
+
+        const isValidParam = chckParam({
+            numPage, ty, title, tag
+        });
+
+        if (isValidParam) {
+            conn = await MYSQL.getConn();
+
+            const devDocList = await DEV_DOC_SVC.getDocList({
+                conn, numPage, ty, title, tag
+            });
+
+            res.send({
+                devDocList,
+                ...RSPNS.SUCCES
+            });
+        } else {
+            res.send(RSPNS.FAIL_INVLD_FIELD);
+        }
+    } catch (err) {
+        console.error(err);
+        res.send(err.rspns || RSPNS.FAIL);
+    } finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+};

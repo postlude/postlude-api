@@ -67,3 +67,41 @@ exports.modifyDoc = async (arg) => {
     // [STEP 4] 신규 태그 연결 저장
     await bulkSaveTagLnk({ conn, devDocIdx, tagIdxAry });
 };
+
+/**
+ * @description 개발 문서 검색
+ * @param {Object} arg { conn, numPage, ty, title, tag }
+ * @returns {Object} { totCnt, devDocList }
+ */
+exports.getDocList = async (arg) => {
+    const {
+        conn, numPage, ty, title, tag
+    } = arg;
+
+    const limit = 10;
+    const offset = (numPage - 1) * 10;
+
+    if (ty === '1') { // 태그 검색
+        const totCnt = await DEV_DOC.select2({ conn, tag });
+
+        if (totCnt) {
+            const devDocList = await DEV_DOC.select1({
+                conn, tag, offset, limit
+            });
+            return { totCnt, devDocList };
+        } else {
+            return { totCnt };
+        }
+    } else { // 제목 검색
+        const totCnt = await DEV_DOC.select4({ conn, title });
+
+        if (totCnt) {
+            const devDocList = await DEV_DOC.select3({
+                conn, title, offset, limit
+            });
+            return { totCnt, devDocList };
+        } else {
+            return { totCnt };
+        }
+    }
+};
