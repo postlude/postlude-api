@@ -18,6 +18,16 @@ const insert1 = `
 
 /* ================================================== [UPDATE] ================================================== */
 
+const update1 = `
+    UPDATE
+        DEV_DOC
+    SET
+        TITLE = :title,
+        URL = :url
+    WHERE
+        IDX = :idx
+`;
+
 /* ================================================== [DELETE] ================================================== */
 
 const delete1 = `
@@ -29,5 +39,6 @@ const delete1 = `
 
 module.exports = {
     insert1,
+    update1,
     delete1
 };
