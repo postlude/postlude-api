@@ -110,19 +110,14 @@ exports.modifyDoc = async (req, res) => {
 /**
  * @description 문서 검색시 파라미터 체크
  * 제목 검색은 3자 이상부터 가능
- * @param {Object} arg { numPage, ty, title, tag }
+ * @param {Object} arg { numPage, ty, srchWord }
  * @returns {boolean}
  */
 const chckParam = (arg) => {
-    const {
-        numPage, ty, title, tag
-    } = arg;
+    const { numPage, ty, srchWord } = arg;
 
-    if (Number.isFinite(numPage)
-        && (
-            (ty === '1' && tag)
-            || (ty === '2' && title && title.length > 2)
-        )
+    if (Number.isFinite(numPage) && srchWord
+        && (ty === '1' || (ty === '2' && srchWord.length > 2))
     ) {
         return true;
     } else {
@@ -137,21 +132,17 @@ exports.getDocList = async (req, res) => {
     let conn = null;
 
     try {
-        const {
-            page, ty, title, tag
-        } = req.query;
+        const { page, ty, srchWord } = req.query;
 
         const numPage = parseInt(page, 10);
 
-        const isValidParam = chckParam({
-            numPage, ty, title, tag
-        });
+        const isValidParam = chckParam({ numPage, ty, srchWord });
 
         if (isValidParam) {
             conn = await MYSQL.getConn();
 
             const devDocList = await DEV_DOC_SVC.getDocList({
-                conn, numPage, ty, title, tag
+                conn, numPage, ty, srchWord
             });
 
             res.send({
