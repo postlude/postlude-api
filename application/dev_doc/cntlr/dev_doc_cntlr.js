@@ -141,12 +141,12 @@ exports.getDocList = async (req, res) => {
         if (isValidParam) {
             conn = await MYSQL.getConn();
 
-            const devDocList = await DEV_DOC_SVC.getDocList({
+            const result = await DEV_DOC_SVC.getDocList({
                 conn, numPage, ty, srchWord
             });
 
             res.send({
-                devDocList,
+                ...result,
                 ...RSPNS.SUCCES
             });
         } else {
