@@ -78,6 +78,19 @@ const select4 = async (arg) => {
 };
 
 /**
+ * @description 인덱스로 개발 문서 1개 로드
+ * @param {Object} arg { conn, devDocIdx }
+ * @returns {Array}
+ */
+const select5 = async (arg) => {
+    const { conn, devDocIdx } = arg;
+
+    const [result] = await conn.execute(DEV_DOC.select5, { devDocIdx });
+
+    return result;
+};
+
+/**
  * @description 개발 문서 1개 수정
  * @param {Object} arg { conn, devDoc }
  */
@@ -103,6 +116,7 @@ module.exports = {
     select2,
     select3,
     select4,
+    select5,
     update1,
     delete1
 };

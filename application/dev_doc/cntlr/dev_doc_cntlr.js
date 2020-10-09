@@ -77,7 +77,7 @@ exports.rmDoc = async (req, res) => {
 /**
  * @description 개발 문서 수정 API
  */
-exports.modifyDoc = async (req, res) => {
+exports.mdfyDoc = async (req, res) => {
     let conn = null;
 
     try {
@@ -87,7 +87,7 @@ exports.modifyDoc = async (req, res) => {
             conn = await MYSQL.getConn();
             await conn.beginTransaction();
 
-            await DEV_DOC_SVC.modifyDoc({ conn, devDoc, tagAry });
+            await DEV_DOC_SVC.mdfyDoc({ conn, devDoc, tagAry });
 
             await conn.commit();
             res.send(RSPNS.SUCCES);
@@ -110,19 +110,14 @@ exports.modifyDoc = async (req, res) => {
 /**
  * @description 문서 검색시 파라미터 체크
  * 제목 검색은 3자 이상부터 가능
- * @param {Object} arg { numPage, ty, title, tag }
+ * @param {Object} arg { numPage, ty, srchWord }
  * @returns {boolean}
  */
 const chckParam = (arg) => {
-    const {
-        numPage, ty, title, tag
-    } = arg;
+    const { numPage, ty, srchWord } = arg;
 
-    if (Number.isFinite(numPage)
-        && (
-            (ty === '1' && tag)
-            || (ty === '2' && title && title.length > 2)
-        )
+    if (Number.isFinite(numPage) && srchWord
+        && (ty === '1' || (ty === '2' && srchWord.length > 2))
     ) {
         return true;
     } else {
@@ -137,25 +132,54 @@ exports.getDocList = async (req, res) => {
     let conn = null;
 
     try {
-        const {
-            page, ty, title, tag
-        } = req.query;
+        const { page, ty, srchWord } = req.query;
 
         const numPage = parseInt(page, 10);
 
-        const isValidParam = chckParam({
-            numPage, ty, title, tag
-        });
+        const isValidParam = chckParam({ numPage, ty, srchWord });
 
         if (isValidParam) {
             conn = await MYSQL.getConn();
 
-            const devDocList = await DEV_DOC_SVC.getDocList({
-                conn, numPage, ty, title, tag
+            const result = await DEV_DOC_SVC.getDocList({
+                conn, numPage, ty, srchWord
             });
 
             res.send({
-                devDocList,
+                ...result,
+                ...RSPNS.SUCCES
+            });
+        } else {
+            res.send(RSPNS.FAIL_INVLD_FIELD);
+        }
+    } catch (err) {
+        console.error(err);
+        res.send(err.rspns || RSPNS.FAIL);
+    } finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+};
+
+/**
+ * @description 개발 문서 1개 로드 API
+ */
+exports.getDoc = async (req, res) => {
+    let conn = null;
+
+    try {
+        const { idx } = req.params;
+
+        const devDocIdx = parseInt(idx, 10);
+
+        if (Number.isFinite(devDocIdx)) {
+            conn = await MYSQL.getConn();
+
+            const result = await DEV_DOC_SVC.getDocByIdx({ conn, devDocIdx });
+
+            res.send({
+                ...result,
                 ...RSPNS.SUCCES
             });
         } else {

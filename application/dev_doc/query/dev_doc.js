@@ -18,6 +18,7 @@ const insert1 = `
 
 const select1 = `
     SELECT
+        D.IDX AS idx,
         D.TITLE AS title,
         D.URL AS url
     FROM
@@ -55,6 +56,7 @@ const select2 = `
 
 const select3 = `
     SELECT
+        IDX AS idx,
         TITLE AS title,
         URL AS url
     FROM
@@ -72,6 +74,26 @@ const select4 = `
         DEV_DOC
     WHERE
         title LIKE :title
+`;
+
+const select5 = `
+    SELECT
+        D.IDX AS idx,
+        D.TITLE AS title,
+        D.URL AS url,
+        T.TAG AS tag
+    FROM
+        DEV_DOC D
+    INNER JOIN
+        DEV_DOC_TAG_LNK L
+    ON
+        D.IDX = L.DEV_DOC_IDX
+    INNER JOIN
+        TAG T
+    ON
+        L.TAG_IDX = T.IDX
+    WHERE
+        D.IDX = :devDocIdx
 `;
 
 /* ================================================== [UPDATE] ================================================== */
@@ -101,6 +123,7 @@ module.exports = {
     select2,
     select3,
     select4,
+    select5,
     update1,
     delete1
 };

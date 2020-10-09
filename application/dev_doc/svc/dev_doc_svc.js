@@ -51,7 +51,7 @@ exports.rmDoc = async (arg) => {
  * @description 개발 문서 수정
  * @param {Object} arg { conn, devDoc, tagAry }
  */
-exports.modifyDoc = async (arg) => {
+exports.mdfyDoc = async (arg) => {
     const { conn, devDoc, tagAry } = arg;
 
     // [STEP 1] 개발 문서 수정
@@ -70,18 +70,19 @@ exports.modifyDoc = async (arg) => {
 
 /**
  * @description 개발 문서 검색
- * @param {Object} arg { conn, numPage, ty, title, tag }
+ * @param {Object} arg { conn, numPage, ty, srchWord }
  * @returns {Object} { totCnt, devDocList }
  */
 exports.getDocList = async (arg) => {
     const {
-        conn, numPage, ty, title, tag
+        conn, numPage, ty, srchWord
     } = arg;
 
     const limit = 10;
     const offset = (numPage - 1) * 10;
 
     if (ty === '1') { // 태그 검색
+        const tag = srchWord;
         const totCnt = await DEV_DOC.select2({ conn, tag });
 
         if (totCnt) {
@@ -93,6 +94,7 @@ exports.getDocList = async (arg) => {
             return { totCnt };
         }
     } else { // 제목 검색
+        const title = srchWord;
         const totCnt = await DEV_DOC.select4({ conn, title });
 
         if (totCnt) {
@@ -104,4 +106,27 @@ exports.getDocList = async (arg) => {
             return { totCnt };
         }
     }
+};
+
+/**
+ * @description 인덱스로 개발문서 1개 로드
+ * @param {Object} arg { conn, devDocIdx }
+ * @returns {Object} { devDoc, tagAry }
+ */
+exports.getDocByIdx = async (arg) => {
+    const { conn, devDocIdx } = arg;
+
+    const devDocAry = await DEV_DOC.select5({ conn, devDocIdx });
+
+    const [{ idx, title, url }] = devDocAry;
+
+    const tagAry = [];
+    devDocAry.forEach(({ tag }) => {
+        tagAry.push(tag);
+    });
+
+    return {
+        devDoc: { idx, title, url },
+        tagAry
+    };
 };
