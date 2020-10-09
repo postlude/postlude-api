@@ -18,6 +18,7 @@ const insert1 = `
 
 const select1 = `
     SELECT
+        D.IDX AS idx,
         D.TITLE AS title,
         D.URL AS url
     FROM
