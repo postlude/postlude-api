@@ -107,3 +107,26 @@ exports.getDocList = async (arg) => {
         }
     }
 };
+
+/**
+ * @description 인덱스로 개발문서 1개 로드
+ * @param {Object} arg { conn, devDocIdx }
+ * @returns {Object} { devDoc, tagAry }
+ */
+exports.getDocByIdx = async (arg) => {
+    const { conn, devDocIdx } = arg;
+
+    const devDocAry = await DEV_DOC.select5({ conn, devDocIdx });
+
+    const [{ title, url }] = devDocAry;
+
+    const tagAry = [];
+    devDocAry.forEach(({ tag }) => {
+        tagAry.push(tag);
+    });
+
+    return {
+        devDoc: { title, url },
+        tagAry
+    };
+};

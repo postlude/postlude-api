@@ -75,6 +75,25 @@ const select4 = `
         title LIKE :title
 `;
 
+const select5 = `
+    SELECT
+        D.TITLE AS title,
+        D.URL AS url,
+        T.TAG AS tag
+    FROM
+        DEV_DOC D
+    INNER JOIN
+        DEV_DOC_TAG_LNK L
+    ON
+        D.IDX = L.DEV_DOC_IDX
+    INNER JOIN
+        TAG T
+    ON
+        L.TAG_IDX = T.IDX
+    WHERE
+        D.IDX = :devDocIdx
+`;
+
 /* ================================================== [UPDATE] ================================================== */
 
 const update1 = `
@@ -102,6 +121,7 @@ module.exports = {
     select2,
     select3,
     select4,
+    select5,
     update1,
     delete1
 };

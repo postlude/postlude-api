@@ -161,3 +161,36 @@ exports.getDocList = async (req, res) => {
         }
     }
 };
+
+/**
+ * @description 개발 문서 1개 로드 API
+ */
+exports.getDoc = async (req, res) => {
+    let conn = null;
+
+    try {
+        const { idx } = req.params;
+
+        const devDocIdx = parseInt(idx, 10);
+
+        if (Number.isFinite(devDocIdx)) {
+            conn = await MYSQL.getConn();
+
+            const result = await DEV_DOC_SVC.getDocByIdx({ conn, devDocIdx });
+
+            res.send({
+                ...result,
+                ...RSPNS.SUCCES
+            });
+        } else {
+            res.send(RSPNS.FAIL_INVLD_FIELD);
+        }
+    } catch (err) {
+        console.error(err);
+        res.send(err.rspns || RSPNS.FAIL);
+    } finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+};

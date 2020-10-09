@@ -13,6 +13,7 @@ router.route('/list')
     .get(DEV_DOC_CNTLR.getDocList);
 
 router.route('/:idx')
+    .get(DEV_DOC_CNTLR.getDoc)
     .delete(DEV_DOC_CNTLR.rmDoc);
 
 module.exports = router;
