@@ -7,7 +7,7 @@ const DEV_DOC_CNTLR = require('@/application/dev_doc/cntlr/dev_doc_cntlr');
 
 router.route('/')
     .post(DEV_DOC_CNTLR.addDoc)
-    .put(DEV_DOC_CNTLR.modifyDoc);
+    .put(DEV_DOC_CNTLR.mdfyDoc);
 
 router.route('/list')
     .get(DEV_DOC_CNTLR.getDocList);

@@ -77,7 +77,7 @@ exports.rmDoc = async (req, res) => {
 /**
  * @description 개발 문서 수정 API
  */
-exports.modifyDoc = async (req, res) => {
+exports.mdfyDoc = async (req, res) => {
     let conn = null;
 
     try {
@@ -87,7 +87,7 @@ exports.modifyDoc = async (req, res) => {
             conn = await MYSQL.getConn();
             await conn.beginTransaction();
 
-            await DEV_DOC_SVC.modifyDoc({ conn, devDoc, tagAry });
+            await DEV_DOC_SVC.mdfyDoc({ conn, devDoc, tagAry });
 
             await conn.commit();
             res.send(RSPNS.SUCCES);

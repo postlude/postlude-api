@@ -51,7 +51,7 @@ exports.rmDoc = async (arg) => {
  * @description 개발 문서 수정
  * @param {Object} arg { conn, devDoc, tagAry }
  */
-exports.modifyDoc = async (arg) => {
+exports.mdfyDoc = async (arg) => {
     const { conn, devDoc, tagAry } = arg;
 
     // [STEP 1] 개발 문서 수정
@@ -118,7 +118,7 @@ exports.getDocByIdx = async (arg) => {
 
     const devDocAry = await DEV_DOC.select5({ conn, devDocIdx });
 
-    const [{ title, url }] = devDocAry;
+    const [{ idx, title, url }] = devDocAry;
 
     const tagAry = [];
     devDocAry.forEach(({ tag }) => {
@@ -126,7 +126,7 @@ exports.getDocByIdx = async (arg) => {
     });
 
     return {
-        devDoc: { title, url },
+        devDoc: { idx, title, url },
         tagAry
     };
 };

@@ -56,6 +56,7 @@ const select2 = `
 
 const select3 = `
     SELECT
+        IDX AS idx,
         TITLE AS title,
         URL AS url
     FROM
@@ -77,6 +78,7 @@ const select4 = `
 
 const select5 = `
     SELECT
+        D.IDX AS idx,
         D.TITLE AS title,
         D.URL AS url,
         T.TAG AS tag
