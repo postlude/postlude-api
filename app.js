@@ -1,12 +1,14 @@
 require('module-alias/register');
 
+global.ENV = process.env.NODE_ENV || 'development';
+global.IS_PROD = ENV === 'production';
+global.CstmErr = require('@/config/cstm_err');
+
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('@/config/mysql');
-
-global.CstmErr = require('@/config/cstm_err');
 
 const app = express();
 const port = 3000;
@@ -21,7 +23,8 @@ app.use('/dev-doc', require('@/routes/dev_doc_router'));
 
 app.listen(port, async () => {
     console.log('==================== [MyCmd WAS] ====================');
-    console.log(`- Port : ${port}`);
+    console.log(`- ENV : ${ENV}`);
+    console.log(`- PORT : ${port}`);
     await mysql.testConn();
     console.log('=====================================================');
 });

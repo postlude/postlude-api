@@ -4,10 +4,18 @@
 
 const mysql = require('mysql2');
 
-const pool = mysql.createPool({
+const mysqlCnf = IS_PROD ? {
+    host: 'mysql-8.0.20',
+    user: 'postlude',
+    password: 'dMm8Hcsvr7EShcFw'
+} : {
     host: 'localhost',
     user: 'root',
-    password: 'root',
+    password: 'root'
+};
+
+const pool = mysql.createPool({
+    ...mysqlCnf,
     database: 'mycmd',
     connectionLimit: 20,
     waitForConnections: true,
