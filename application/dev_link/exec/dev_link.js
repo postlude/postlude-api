@@ -2,17 +2,17 @@
  * @fileoverview application/dev_doc/exec/dev_doc.js
  */
 
-const DEV_DOC = require('../query/dev_doc');
+const DEV_LINK = require('../query/dev_link');
 
 /**
  * @description 개발 문서 1개 INSERT
- * @param {Object} arg { conn, devDoc }
- * @returns {number} devDocIdx
+ * @param {Object} arg { conn, devLink }
+ * @returns {number} devLinkIdx
  */
 const insert1 = async (arg) => {
-    const { conn, devDoc } = arg;
+    const { conn, devLink } = arg;
 
-    const [{ insertId }] = await conn.execute(DEV_DOC.insert1, devDoc);
+    const [{ insertId }] = await conn.execute(DEV_LINK.insert1, devLink);
 
     return insertId;
 };
@@ -27,7 +27,7 @@ const select1 = async (arg) => {
         conn, tag, offset, limit
     } = arg;
 
-    const [result] = await conn.execute(DEV_DOC.select1, { tag, offset, limit });
+    const [result] = await conn.execute(DEV_LINK.select1, { tag, offset, limit });
 
     return result;
 };
@@ -40,7 +40,7 @@ const select1 = async (arg) => {
 const select2 = async (arg) => {
     const { conn, tag } = arg;
 
-    const [[{ cnt }]] = await conn.execute(DEV_DOC.select2, { tag });
+    const [[{ cnt }]] = await conn.execute(DEV_LINK.select2, { tag });
 
     return cnt;
 };
@@ -55,7 +55,7 @@ const select3 = async (arg) => {
         conn, title, offset, limit
     } = arg;
 
-    const [result] = await conn.execute(DEV_DOC.select3, {
+    const [result] = await conn.execute(DEV_LINK.select3, {
         title: `%${title}%`,
         offset,
         limit
@@ -72,42 +72,42 @@ const select3 = async (arg) => {
 const select4 = async (arg) => {
     const { conn, title } = arg;
 
-    const [[{ cnt }]] = await conn.execute(DEV_DOC.select4, { title: `%${title}%` });
+    const [[{ cnt }]] = await conn.execute(DEV_LINK.select4, { title: `%${title}%` });
 
     return cnt;
 };
 
 /**
  * @description 인덱스로 개발 문서 1개 로드
- * @param {Object} arg { conn, devDocIdx }
+ * @param {Object} arg { conn, devLinkIdx }
  * @returns {Array}
  */
 const select5 = async (arg) => {
-    const { conn, devDocIdx } = arg;
+    const { conn, devLinkIdx } = arg;
 
-    const [result] = await conn.execute(DEV_DOC.select5, { devDocIdx });
+    const [result] = await conn.execute(DEV_LINK.select5, { devLinkIdx });
 
     return result;
 };
 
 /**
  * @description 개발 문서 1개 수정
- * @param {Object} arg { conn, devDoc }
+ * @param {Object} arg { conn, devLink }
  */
 const update1 = async (arg) => {
-    const { conn, devDoc } = arg;
+    const { conn, devLink } = arg;
 
-    await conn.execute(DEV_DOC.update1, devDoc);
+    await conn.execute(DEV_LINK.update1, devLink);
 };
 
 /**
  * @description 개발 문서 1개 삭제
- * @param {Object} arg { conn, devDocIdx }
+ * @param {Object} arg { conn, devLinkIdx }
  */
 const delete1 = async (arg) => {
-    const { conn, devDocIdx } = arg;
+    const { conn, devLinkIdx } = arg;
 
-    await conn.execute(DEV_DOC.delete1, { idx: devDocIdx });
+    await conn.execute(DEV_LINK.delete1, { idx: devLinkIdx });
 };
 
 module.exports = {

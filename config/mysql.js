@@ -16,7 +16,7 @@ const mysqlCnf = IS_PROD ? {
 
 const pool = mysql.createPool({
     ...mysqlCnf,
-    database: 'mycmd',
+    database: 'postlude',
     connectionLimit: 20,
     waitForConnections: true,
     queueLimit: 0,

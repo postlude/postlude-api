@@ -1,12 +1,12 @@
 /**
- * @fileoverview application/dev_doc/query/dev_doc.js
+ * @fileoverview application/dev_link/query/dev_link.js
  */
 
 /* ================================================== [INSERT] ================================================== */
 
 const insert1 = `
     INSERT INTO
-        DEV_DOC (
+        DEV_LINK (
             TITLE, URL
         )
     VALUES (
@@ -22,11 +22,11 @@ const select1 = `
         D.TITLE AS title,
         D.URL AS url
     FROM
-        DEV_DOC D
+        DEV_LINK D
     INNER JOIN
-        DEV_DOC_TAG_LNK L
+        DEV_LINK_TAG L
     ON
-        D.IDX = L.DEV_DOC_IDX
+        D.IDX = L.DEV_LINK_IDX
     INNER JOIN
         TAG T
     ON
@@ -41,11 +41,11 @@ const select2 = `
     SELECT
         COUNT(D.IDX) AS cnt
     FROM
-        DEV_DOC D
+        DEV_LINK D
     INNER JOIN
-        DEV_DOC_TAG_LNK L
+        DEV_LINK_TAG L
     ON
-        D.IDX = L.DEV_DOC_IDX
+        D.IDX = L.DEV_LINK_IDX
     INNER JOIN
         TAG T
     ON
@@ -60,9 +60,9 @@ const select3 = `
         TITLE AS title,
         URL AS url
     FROM
-        DEV_DOC
+        DEV_LINK
     WHERE
-        title LIKE :title
+        TITLE LIKE :title
     LIMIT
         :offset, :limit
 `;
@@ -71,9 +71,9 @@ const select4 = `
     SELECT
         COUNT(IDX) AS cnt
     FROM
-        DEV_DOC
+        DEV_LINK
     WHERE
-        title LIKE :title
+        TITLE LIKE :title
 `;
 
 const select5 = `
@@ -83,24 +83,24 @@ const select5 = `
         D.URL AS url,
         T.TAG AS tag
     FROM
-        DEV_DOC D
+        DEV_LINK D
     INNER JOIN
-        DEV_DOC_TAG_LNK L
+        DEV_LINK_TAG L
     ON
-        D.IDX = L.DEV_DOC_IDX
+        D.IDX = L.DEV_LINK_IDX
     INNER JOIN
         TAG T
     ON
         L.TAG_IDX = T.IDX
     WHERE
-        D.IDX = :devDocIdx
+        D.IDX = :devLinkIdx
 `;
 
 /* ================================================== [UPDATE] ================================================== */
 
 const update1 = `
     UPDATE
-        DEV_DOC
+        DEV_LINK
     SET
         TITLE = :title,
         URL = :url
@@ -112,7 +112,7 @@ const update1 = `
 
 const delete1 = `
     DELETE FROM
-        DEV_DOC
+        DEV_LINK
     WHERE
         IDX = :idx
 `;

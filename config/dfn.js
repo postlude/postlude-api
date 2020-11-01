@@ -12,11 +12,3 @@ exports.RSPNS = {
     FAIL_QUERY_EXEC: { code: 2002 },
     FAIL_NOT_EXISTED_DATA: { code: 2003 }
 };
-
-/**
- * @description 옵션 타입
- */
-exports.OPTN_TY = {
-    MAIN_CMD: 1,
-    SUB_CMD: 2
-};

@@ -1,13 +1,13 @@
 /**
- * @fileoverview application/cmd/query/optn.js
+ * @fileoverview application/dev_link/query/dev_link_tag.js
  */
 
 /* ================================================== [INSERT] ================================================== */
 
 const insert1 = `
     INSERT INTO
-        OPTN (
-            TY, CMD_IDX, CMD_OPTN, DC, FRMT, EX
+        DEV_LINK_TAG (
+            DEV_LINK_IDX, TAG_IDX
         )
     VALUES
         ?
@@ -21,10 +21,9 @@ const insert1 = `
 
 const delete1 = `
     DELETE FROM
-        OPTN
+        DEV_LINK_TAG
     WHERE
-        TY = :ty
-        AND CMD_IDX = :cmdIdx
+        DEV_LINK_IDX = :devLinkIdx
 `;
 
 module.exports = {

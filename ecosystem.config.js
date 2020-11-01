@@ -1,6 +1,6 @@
 module.exports = {
     apps: [{
-        name: 'mycmd-was',
+        name: 'postlude-api',
         script: './app.js',
         watch: true,
         ignore_watch: ['.git', 'logs', 'node_modules'],

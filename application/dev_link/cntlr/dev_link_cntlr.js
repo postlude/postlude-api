@@ -1,25 +1,25 @@
 /**
- * @fileoverview application/dev_doc/cntlr/dev_doc_cntlr.js
+ * @fileoverview application/dev_link/cntlr/dev_link_cntlr.js
  */
 
 const MYSQL = require('@/config/mysql');
 const { RSPNS } = require('@/config/dfn');
-const DEV_DOC_SVC = require('../svc/dev_doc_svc');
+const DEV_LINK_SVC = require('../svc/dev_link_svc');
 
 /**
  * @description 개발 문서 생성 API
  */
-exports.addDoc = async (req, res) => {
+exports.addLink = async (req, res) => {
     let conn = null;
 
     try {
-        const { devDoc, tagAry } = req.body;
+        const { devLink, tagAry } = req.body;
 
-        if (devDoc && Array.isArray(tagAry) && tagAry.length) {
+        if (devLink && Array.isArray(tagAry) && tagAry.length) {
             conn = await MYSQL.getConn();
             await conn.beginTransaction();
 
-            await DEV_DOC_SVC.addDoc({ conn, devDoc, tagAry });
+            await DEV_LINK_SVC.addLink({ conn, devLink, tagAry });
 
             await conn.commit();
             res.send(RSPNS.SUCCES);
@@ -42,19 +42,19 @@ exports.addDoc = async (req, res) => {
 /**
  * @description 개발 문서 삭제 API
  */
-exports.rmDoc = async (req, res) => {
+exports.rmLink = async (req, res) => {
     let conn = null;
 
     try {
         const { idx } = req.params;
 
-        const devDocIdx = parseInt(idx, 10);
+        const devLinkIdx = parseInt(idx, 10);
 
-        if (Number.isFinite(devDocIdx)) {
+        if (Number.isFinite(devLinkIdx)) {
             conn = await MYSQL.getConn();
             await conn.beginTransaction();
 
-            await DEV_DOC_SVC.rmDoc({ conn, devDocIdx });
+            await DEV_LINK_SVC.rmLink({ conn, devLinkIdx });
 
             await conn.commit();
             res.send(RSPNS.SUCCES);
@@ -77,17 +77,17 @@ exports.rmDoc = async (req, res) => {
 /**
  * @description 개발 문서 수정 API
  */
-exports.mdfyDoc = async (req, res) => {
+exports.mdfyLink = async (req, res) => {
     let conn = null;
 
     try {
-        const { devDoc, tagAry } = req.body;
+        const { devLink, tagAry } = req.body;
 
-        if (devDoc && Array.isArray(tagAry) && tagAry.length) {
+        if (devLink && Array.isArray(tagAry) && tagAry.length) {
             conn = await MYSQL.getConn();
             await conn.beginTransaction();
 
-            await DEV_DOC_SVC.mdfyDoc({ conn, devDoc, tagAry });
+            await DEV_LINK_SVC.mdfyLink({ conn, devLink, tagAry });
 
             await conn.commit();
             res.send(RSPNS.SUCCES);
@@ -128,7 +128,7 @@ const chckParam = (arg) => {
 /**
  * @description 개발 문서 검색 API
  */
-exports.getDocList = async (req, res) => {
+exports.getLinkList = async (req, res) => {
     let conn = null;
 
     try {
@@ -141,7 +141,7 @@ exports.getDocList = async (req, res) => {
         if (isValidParam) {
             conn = await MYSQL.getConn();
 
-            const result = await DEV_DOC_SVC.getDocList({
+            const result = await DEV_LINK_SVC.getLinkList({
                 conn, numPage, ty, srchWord
             });
 
@@ -165,18 +165,18 @@ exports.getDocList = async (req, res) => {
 /**
  * @description 개발 문서 1개 로드 API
  */
-exports.getDoc = async (req, res) => {
+exports.getLink = async (req, res) => {
     let conn = null;
 
     try {
         const { idx } = req.params;
 
-        const devDocIdx = parseInt(idx, 10);
+        const devLinkIdx = parseInt(idx, 10);
 
-        if (Number.isFinite(devDocIdx)) {
+        if (Number.isFinite(devLinkIdx)) {
             conn = await MYSQL.getConn();
 
-            const result = await DEV_DOC_SVC.getDocByIdx({ conn, devDocIdx });
+            const result = await DEV_LINK_SVC.getLinkByIdx({ conn, devLinkIdx });
 
             res.send({
                 ...result,
