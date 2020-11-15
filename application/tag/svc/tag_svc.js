@@ -46,6 +46,6 @@ exports.getTagList = async (arg) => {
         const tagList = await TAG.select1({ conn });
         return tagList;
     } else {
-        throw new CstmErr('INVALID TAG TY', RSPNS.FAIL_INVLD_FIELD);
+        throw new CstmErr('INVALID TAG TYPE', RSPNS.FAIL_INVLD_FIELD);
     }
 };
