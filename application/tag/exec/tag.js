@@ -17,6 +17,20 @@ const insert1 = async (arg) => {
     return insertId;
 };
 
+/**
+ * @description 개발 링크에 등록된 모든 태그 로드
+ * @param {Object} arg { conn }
+ * @returns {Array}
+ */
+const select1 = async (arg) => {
+    const { conn } = arg;
+
+    const [result] = await conn.execute(TAG.select1);
+
+    return result;
+};
+
 module.exports = {
-    insert1
+    insert1,
+    select1
 };

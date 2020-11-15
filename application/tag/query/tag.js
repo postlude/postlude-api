@@ -18,10 +18,27 @@ const insert1 = `
 
 /* ================================================== [SELECT] ================================================== */
 
+const select1 = `
+    SELECT
+        T.TAG AS tag,
+        COUNT(T.IDX) AS cnt
+    FROM
+        DEV_LINK_TAG LT
+    INNER JOIN
+        TAG T
+    ON
+        LT.TAG_IDX = T.IDX
+    GROUP BY
+        LT.TAG_IDX
+    ORDER BY
+        T.TAG ASC
+`;
+
 /* ================================================== [UPDATE] ================================================== */
 
 /* ================================================== [DELETE] ================================================== */
 
 module.exports = {
-    insert1
+    insert1,
+    select1
 };

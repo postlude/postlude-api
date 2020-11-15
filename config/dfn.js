@@ -12,3 +12,11 @@ exports.RSPNS = {
     FAIL_QUERY_EXEC: { code: 2002 },
     FAIL_NOT_EXISTED_DATA: { code: 2003 }
 };
+
+/**
+ * @description 태그 타입
+ */
+exports.TAG_TY = {
+    LINK: 1,
+    STMT: 2
+};

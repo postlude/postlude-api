@@ -19,6 +19,7 @@ app.use(bodyParser.json());
 app.use(morgan(logFrmt));
 
 app.use('/dev-link', require('@/routes/dev_link_router'));
+app.use('/tag', require('@/routes/tag_router'));
 
 app.listen(port, async () => {
     console.log('==================== [POSTLUDE API] ====================');
