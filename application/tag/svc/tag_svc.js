@@ -2,6 +2,7 @@
  * @fileoverview application/tag/svc/tag_svc.js
  */
 
+const { RSPNS, TAG_TY } = require('@/config/dfn');
 const { syncAryPrll } = require('@/helper/async');
 const TAG = require('../exec/tag');
 
@@ -31,4 +32,20 @@ exports.saveTagAry = async (arg) => {
     await syncAryPrll(tagAry, saveTag, { conn, tagIdxAry });
 
     return tagIdxAry;
+};
+
+/**
+ * @description 태그 타입에 따른 모든 태그 리스트 로드
+ * @param {Object} arg { conn, tagTy }
+ * @returns {Array} tagList
+ */
+exports.getTagList = async (arg) => {
+    const { conn, tagTy } = arg;
+
+    if (tagTy === TAG_TY.LINK) {
+        const tagList = await TAG.select1({ conn });
+        return tagList;
+    } else {
+        throw new CstmErr('INVALID TAG TYPE', RSPNS.FAIL_INVLD_FIELD);
+    }
 };
