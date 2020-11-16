@@ -9,14 +9,23 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('@/config/mysql');
+const { clientIp, chckIp } = require('@/routes/middleware');
 
 const app = express();
 const port = 3000;
-const logFrmt = ':remote-addr - [:method] :url :status :response-time ms';
 
+app.use(clientIp);
+app.use(chckIp);
 app.use(cors());
 app.use(bodyParser.json());
-app.use(morgan(logFrmt));
+app.use(morgan((tkn, req, res) => {
+    const ip = req.clientIp;
+    const method = tkn.method(req, res);
+    const url = tkn.url(req, res);
+    const status = tkn.status(req, res);
+    const rspnsTime = tkn['response-time'](req, res);
+    return `${ip} - [${method}] ${url} ${status} ${rspnsTime} ms`;
+}));
 
 app.use('/dev-link', require('@/routes/dev_link_router'));
 app.use('/tag', require('@/routes/tag_router'));
@@ -26,5 +35,5 @@ app.listen(port, async () => {
     console.log(`- ENV : ${ENV}`);
     console.log(`- PORT : ${port}`);
     await mysql.testConn();
-    console.log('=====================================================');
+    console.log('========================================================');
 });
