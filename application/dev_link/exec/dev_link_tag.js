@@ -5,7 +5,7 @@
 const DEV_LINK_TAG = require('../query/dev_link_tag');
 
 /**
- * @description 개발 문서 태그 연결 BULK INSERT
+ * @description 개발 링크 태그 연결 BULK INSERT
  * @param {Object} arg { conn, row }
  */
 const insert1 = async (arg) => {
