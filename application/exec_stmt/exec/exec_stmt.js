@@ -17,6 +17,20 @@ const insert1 = async (arg) => {
     return insertId;
 };
 
+/**
+ * @description 실행문 인덱스로 1개 로드
+ * @param {Object} arg { conn, execStmtIdx }
+ * @returns {Object}
+ */
+const select1 = async (arg) => {
+    const { conn, execStmtIdx } = arg;
+
+    const [[result]] = await conn.execute(EXEC_STMT.select1, { execStmtIdx });
+
+    return result;
+};
+
 module.exports = {
-    insert1
+    insert1,
+    select1
 };

@@ -16,10 +16,33 @@ const insert1 = `
 
 /* ================================================== [SELECT] ================================================== */
 
+const select1 = `
+    SELECT
+        S.TITLE AS title,
+        S.STMT AS stmt,
+        S.DC AS dc,
+        CONCAT('[', GROUP_CONCAT(JSON_QUOTE(T.TAG)), ']') AS tagAry
+    FROM
+        EXEC_STMT S
+    INNER JOIN
+        EXEC_STMT_TAG ST
+    ON
+        S.IDX = ST.EXEC_STMT_IDX
+    INNER JOIN
+        TAG T
+    ON
+        ST.TAG_IDX = T.IDX
+    WHERE
+        S.IDX = :execStmtIdx
+    GROUP BY
+        S.IDX
+`;
+
 /* ================================================== [UPDATE] ================================================== */
 
 /* ================================================== [DELETE] ================================================== */
 
 module.exports = {
-    insert1
+    insert1,
+    select1
 };

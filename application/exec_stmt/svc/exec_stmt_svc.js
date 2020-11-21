@@ -34,3 +34,19 @@ exports.addExecStmt = async (arg) => {
 
     await bulkSaveTagLink({ conn, execStmtIdx, tagIdxAry });
 };
+
+/**
+ * @description 실행문 1개 로드
+ * @param {Object} arg { conn, execStmtIdx }
+ * @returns {Object} { execStmt, tagAry }
+ */
+exports.getExecStmtByIdx = async (arg) => {
+    const { conn, execStmtIdx } = arg;
+
+    const { tagAry, ...execStmt } = await EXEC_STMT.select1({ conn, execStmtIdx });
+
+    return {
+        execStmt,
+        tagAry: JSON.parse(tagAry)
+    };
+};
