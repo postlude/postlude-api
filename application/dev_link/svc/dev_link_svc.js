@@ -116,17 +116,10 @@ exports.getLinkList = async (arg) => {
 exports.getLinkByIdx = async (arg) => {
     const { conn, devLinkIdx } = arg;
 
-    const devLinkAry = await DEV_LINK.select5({ conn, devLinkIdx });
-
-    const [{ idx, title, url }] = devLinkAry;
-
-    const tagAry = [];
-    devLinkAry.forEach(({ tag }) => {
-        tagAry.push(tag);
-    });
+    const { tagAry, ...devLink } = await DEV_LINK.select5({ conn, devLinkIdx });
 
     return {
-        devLink: { idx, title, url },
-        tagAry
+        devLink,
+        tagAry: JSON.parse(tagAry)
     };
 };

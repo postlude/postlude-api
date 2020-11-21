@@ -80,12 +80,12 @@ const select4 = async (arg) => {
 /**
  * @description 인덱스로 개발 문서 1개 로드
  * @param {Object} arg { conn, devLinkIdx }
- * @returns {Array}
+ * @returns {Object}
  */
 const select5 = async (arg) => {
     const { conn, devLinkIdx } = arg;
 
-    const [result] = await conn.execute(DEV_LINK.select5, { devLinkIdx });
+    const [[result]] = await conn.execute(DEV_LINK.select5, { devLinkIdx });
 
     return result;
 };

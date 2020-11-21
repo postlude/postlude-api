@@ -81,7 +81,7 @@ const select5 = `
         D.IDX AS idx,
         D.TITLE AS title,
         D.URL AS url,
-        T.TAG AS tag
+        CONCAT('[', GROUP_CONCAT(JSON_QUOTE(T.TAG)), ']') AS tagAry
     FROM
         DEV_LINK D
     INNER JOIN
@@ -94,6 +94,8 @@ const select5 = `
         L.TAG_IDX = T.IDX
     WHERE
         D.IDX = :devLinkIdx
+    GROUP BY
+        D.IDX
 `;
 
 /* ================================================== [UPDATE] ================================================== */
