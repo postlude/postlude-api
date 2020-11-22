@@ -9,6 +9,7 @@ router.route('/')
     .post(EXEC_STMT_CNTLR.addExecStmt);
 
 router.route('/:idx')
-    .get(EXEC_STMT_CNTLR.getExecStmt);
+    .get(EXEC_STMT_CNTLR.getExecStmt)
+    .delete(EXEC_STMT_CNTLR.rmExecStmt);
 
 module.exports = router;

@@ -19,6 +19,14 @@ const insert1 = `
 
 /* ================================================== [DELETE] ================================================== */
 
+const delete1 = `
+    DELETE FROM
+        EXEC_STMT_TAG
+    WHERE
+        EXEC_STMT_IDX = :execStmtIdx
+`;
+
 module.exports = {
-    insert1
+    insert1,
+    delete1
 };

@@ -42,7 +42,15 @@ const select1 = `
 
 /* ================================================== [DELETE] ================================================== */
 
+const delete1 = `
+    DELETE FROM
+        EXEC_STMT
+    WHERE
+        IDX = :execStmtIdx
+`;
+
 module.exports = {
     insert1,
-    select1
+    select1,
+    delete1
 };

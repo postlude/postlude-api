@@ -71,3 +71,38 @@ exports.getExecStmt = async (req, res) => {
         }
     }
 };
+
+/**
+ * @description 실행문 삭제 API
+ */
+exports.rmExecStmt = async (req, res) => {
+    let conn = null;
+
+    try {
+        const { idx } = req.params;
+
+        const execStmtIdx = parseInt(idx, 10);
+
+        if (Number.isFinite(execStmtIdx)) {
+            conn = await MYSQL.getConn();
+            await conn.beginTransaction();
+
+            await EXEC_STMT_SVC.rmExecStmtByIdx({ conn, execStmtIdx });
+
+            await conn.commit();
+            res.send(RSPNS.SUCCES);
+        } else {
+            res.send(RSPNS.FAIL_INVLD_FIELD);
+        }
+    } catch (err) {
+        if (conn) {
+            await conn.rollback();
+        }
+        console.error(err);
+        res.send(err.rspns || RSPNS.FAIL);
+    } finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+};

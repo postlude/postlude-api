@@ -30,7 +30,18 @@ const select1 = async (arg) => {
     return result;
 };
 
+/**
+ * @description 실행문 인덱스 1개 삭제
+ * @param {Object} arg { conn, execStmtIdx }
+ */
+const delete1 = async (arg) => {
+    const { conn, execStmtIdx } = arg;
+
+    await conn.execute(EXEC_STMT.delete1, { execStmtIdx });
+};
+
 module.exports = {
     insert1,
-    select1
+    select1,
+    delete1
 };

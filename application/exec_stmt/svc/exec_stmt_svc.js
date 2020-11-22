@@ -50,3 +50,15 @@ exports.getExecStmtByIdx = async (arg) => {
         tagAry: JSON.parse(tagAry)
     };
 };
+
+/**
+ * @description 실행문 삭제
+ * @param {Object} arg { conn, execStmtIdx }
+ */
+exports.rmExecStmtByIdx = async (arg) => {
+    const { conn, execStmtIdx } = arg;
+
+    await EXEC_STMT_TAG.delete1({ conn, execStmtIdx });
+
+    await EXEC_STMT.delete1({ conn, execStmtIdx });
+};
