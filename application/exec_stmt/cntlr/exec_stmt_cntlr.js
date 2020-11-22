@@ -139,3 +139,69 @@ exports.mdfyExecStmt = async (req, res) => {
         }
     }
 };
+
+/**
+ * @description 문서 검색시 파라미터 체크
+ * 제목 검색은 3자 이상부터 가능
+ * @param {Object} arg { numPage, ty, srchTitle, srchAry }
+ * @returns {boolean}
+ */
+const chckParam = (arg) => {
+    const {
+        numPage, ty, srchTitle, srchAry
+    } = arg;
+
+    if (Number.isFinite(numPage)) {
+        if (ty === '1' && Array.isArray(srchAry) && srchAry.length) {
+            return true;
+        } else if (ty === '2' && srchTitle && srchTitle.length > 2) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+};
+
+/**
+ * @description 실행문 검색 API
+ */
+exports.getExecStmtList = async (req, res) => {
+    let conn = null;
+
+    try {
+        const {
+            page, ty, srchTitle, srchTagAry
+        } = req.query;
+
+        const numPage = parseInt(page, 10);
+        const srchAry = JSON.parse(srchTagAry);
+
+        const isValid = chckParam({
+            numPage, ty, srchTitle, srchAry
+        });
+
+        if (isValid) {
+            conn = await MYSQL.getConn();
+
+            const result = await EXEC_STMT_SVC.getExecStmtList({
+                conn, numPage, ty, srchTitle, srchAry
+            });
+
+            res.send({
+                ...result,
+                ...RSPNS.SUCCES
+            });
+        } else {
+            res.send(RSPNS.FAIL_INVLD_FIELD);
+        }
+    } catch (err) {
+        console.error(err);
+        res.send(err.rspns || RSPNS.FAIL);
+    } finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+};

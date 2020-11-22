@@ -145,11 +145,11 @@ exports.getLinkList = async (req, res) => {
         const numPage = parseInt(page, 10);
         const srchAry = JSON.parse(srchTagAry);
 
-        const isValidParam = chckParam({
+        const isValid = chckParam({
             numPage, ty, srchTitle, srchAry
         });
 
-        if (isValidParam) {
+        if (isValid) {
             conn = await MYSQL.getConn();
 
             const result = await DEV_LINK_SVC.getLinkList({

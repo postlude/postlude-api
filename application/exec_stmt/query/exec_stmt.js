@@ -39,6 +39,89 @@ const select1 = `
         S.IDX
 `;
 
+const select2 = `
+    SELECT
+        COUNT(idx) AS cnt
+    FROM (
+        SELECT
+            S.IDX AS idx
+        FROM
+            EXEC_STMT S
+        INNER JOIN
+            EXEC_STMT_TAG ST
+        ON
+            S.IDX = ST.EXEC_STMT_IDX
+        INNER JOIN
+            TAG T
+        ON
+            ST.TAG_IDX = T.IDX
+        WHERE
+            T.TAG IN (?)
+        GROUP BY
+            S.IDX
+        HAVING
+            COUNT(S.IDX) = ?
+    ) A
+`;
+
+const select3 = `
+    SELECT
+        S.IDX AS idx
+    FROM
+        EXEC_STMT S
+    INNER JOIN
+        EXEC_STMT_TAG ST
+    ON
+        S.IDX = ST.EXEC_STMT_IDX
+    INNER JOIN
+        TAG T
+    ON
+        ST.TAG_IDX = T.IDX
+    WHERE
+        T.TAG IN (?)
+    GROUP BY
+        S.IDX
+    HAVING
+        COUNT(S.IDX) = ?
+    ORDER BY
+        S.IDX ASC
+    LIMIT
+        ?, ?
+`;
+
+const select4 = `
+    SELECT
+        IDX AS idx,
+        TITLE AS title
+    FROM
+        EXEC_STMT
+    WHERE
+        IDX IN (?)
+    ORDER BY
+        IDX ASC
+`;
+
+const select5 = `
+    SELECT
+        COUNT(IDX) AS cnt
+    FROM
+        EXEC_STMT
+    WHERE
+        TITLE LIKE :title
+`;
+
+const select6 = `
+    SELECT
+        IDX AS idx,
+        TITLE AS title
+    FROM
+        EXEC_STMT
+    WHERE
+        TITLE LIKE :title
+    LIMIT
+        :offset, :limit
+`;
+
 /* ================================================== [UPDATE] ================================================== */
 
 const update1 = `
@@ -64,6 +147,11 @@ const delete1 = `
 module.exports = {
     insert1,
     select1,
+    select2,
+    select3,
+    select4,
+    select5,
+    select6,
     update1,
     delete1
 };

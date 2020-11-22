@@ -9,6 +9,9 @@ router.route('/')
     .post(EXEC_STMT_CNTLR.addExecStmt)
     .put(EXEC_STMT_CNTLR.mdfyExecStmt);
 
+router.route('/list')
+    .get(EXEC_STMT_CNTLR.getExecStmtList);
+
 router.route('/:idx')
     .get(EXEC_STMT_CNTLR.getExecStmt)
     .delete(EXEC_STMT_CNTLR.rmExecStmt);
