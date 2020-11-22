@@ -110,16 +110,22 @@ exports.mdfyLink = async (req, res) => {
 /**
  * @description 문서 검색시 파라미터 체크
  * 제목 검색은 3자 이상부터 가능
- * @param {Object} arg { numPage, ty, srchWord }
+ * @param {Object} arg { numPage, ty, srchTitle, srchAry }
  * @returns {boolean}
  */
 const chckParam = (arg) => {
-    const { numPage, ty, srchWord } = arg;
+    const {
+        numPage, ty, srchTitle, srchAry
+    } = arg;
 
-    if (Number.isFinite(numPage) && srchWord
-        && (ty === '1' || (ty === '2' && srchWord.length > 2))
-    ) {
-        return true;
+    if (Number.isFinite(numPage)) {
+        if (ty === '1' && Array.isArray(srchAry) && srchAry.length) {
+            return true;
+        } else if (ty === '2' && srchTitle && srchTitle.length > 2) {
+            return true;
+        } else {
+            return false;
+        }
     } else {
         return false;
     }
@@ -132,17 +138,22 @@ exports.getLinkList = async (req, res) => {
     let conn = null;
 
     try {
-        const { page, ty, srchWord } = req.query;
+        const {
+            page, ty, srchTitle, srchTagAry
+        } = req.query;
 
         const numPage = parseInt(page, 10);
+        const srchAry = JSON.parse(srchTagAry);
 
-        const isValidParam = chckParam({ numPage, ty, srchWord });
+        const isValidParam = chckParam({
+            numPage, ty, srchTitle, srchAry
+        });
 
         if (isValidParam) {
             conn = await MYSQL.getConn();
 
             const result = await DEV_LINK_SVC.getLinkList({
-                conn, numPage, ty, srchWord
+                conn, numPage, ty, srchTitle, srchAry
             });
 
             res.send({
