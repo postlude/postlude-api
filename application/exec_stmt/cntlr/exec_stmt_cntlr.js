@@ -106,3 +106,36 @@ exports.rmExecStmt = async (req, res) => {
         }
     }
 };
+
+/**
+ * @description 실행문 수정 API
+ */
+exports.mdfyExecStmt = async (req, res) => {
+    let conn = null;
+
+    try {
+        const { execStmt, tagAry } = req.body;
+
+        if (execStmt && Array.isArray(tagAry) && tagAry.length) {
+            conn = await MYSQL.getConn();
+            await conn.beginTransaction();
+
+            await EXEC_STMT_SVC.mdfyExecStmt({ conn, execStmt, tagAry });
+
+            await conn.commit();
+            res.send(RSPNS.SUCCES);
+        } else {
+            res.send(RSPNS.FAIL_INVLD_FIELD);
+        }
+    } catch (err) {
+        if (conn) {
+            await conn.rollback();
+        }
+        console.error(err);
+        res.send(err.rspns || RSPNS.FAIL);
+    } finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+};

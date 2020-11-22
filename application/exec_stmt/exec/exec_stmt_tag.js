@@ -21,7 +21,7 @@ const insert1 = async (arg) => {
 const delete1 = async (arg) => {
     const { conn, execStmtIdx } = arg;
 
-    await conn.execute(EXEC_STMT_TAG.insert1, { execStmtIdx });
+    await conn.execute(EXEC_STMT_TAG.delete1, { execStmtIdx });
 };
 
 module.exports = {

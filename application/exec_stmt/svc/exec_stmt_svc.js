@@ -62,3 +62,24 @@ exports.rmExecStmtByIdx = async (arg) => {
 
     await EXEC_STMT.delete1({ conn, execStmtIdx });
 };
+
+/**
+ * @description 실행문 수정
+ * @param {Object} arg { conn, execStmt, tagAry }
+ */
+exports.mdfyExecStmt = async (arg) => {
+    const { conn, execStmt, tagAry } = arg;
+    const { idx: execStmtIdx } = execStmt;
+
+    // [STEP 1] 실행문 수정
+    await EXEC_STMT.update1({ conn, execStmt });
+
+    // [STEP 2] 기존 연결 태그 삭제
+    await EXEC_STMT_TAG.delete1({ conn, execStmtIdx });
+
+    // [STEP 3] 태그 생성
+    const tagIdxAry = await TAG_SVC.saveTagAry({ conn, tagAry });
+
+    // [STEP 4] 신규 태그 저장
+    await bulkSaveTagLink({ conn, execStmtIdx, tagIdxAry });
+};

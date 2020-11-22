@@ -31,6 +31,16 @@ const select1 = async (arg) => {
 };
 
 /**
+ * @description 실행문 1개 수정
+ * @param {Object} arg { conn, execStmt }
+ */
+const update1 = async (arg) => {
+    const { conn, execStmt } = arg;
+
+    await conn.execute(EXEC_STMT.update1, execStmt);
+};
+
+/**
  * @description 실행문 인덱스 1개 삭제
  * @param {Object} arg { conn, execStmtIdx }
  */
@@ -43,5 +53,6 @@ const delete1 = async (arg) => {
 module.exports = {
     insert1,
     select1,
+    update1,
     delete1
 };

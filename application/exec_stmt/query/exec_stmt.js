@@ -18,6 +18,7 @@ const insert1 = `
 
 const select1 = `
     SELECT
+        S.IDX AS idx,
         S.TITLE AS title,
         S.STMT AS stmt,
         S.DC AS dc,
@@ -40,6 +41,17 @@ const select1 = `
 
 /* ================================================== [UPDATE] ================================================== */
 
+const update1 = `
+    UPDATE
+        EXEC_STMT
+    SET
+        TITLE = :title,
+        STMT = :stmt,
+        DC = :dc
+    WHERE
+        IDX = :idx
+`;
+
 /* ================================================== [DELETE] ================================================== */
 
 const delete1 = `
@@ -52,5 +64,6 @@ const delete1 = `
 module.exports = {
     insert1,
     select1,
+    update1,
     delete1
 };
