@@ -69,37 +69,42 @@ exports.mdfyLink = async (arg) => {
 };
 
 /**
- * @description 개발 문서 검색
- * @param {Object} arg { conn, numPage, ty, srchWord }
+ * @description 개발 링크 검색
+ * @param {Object} arg { conn, numPage, ty, srchTitle, srchAry }
  * @returns {Object} { totCnt, devLinkList }
  */
 exports.getLinkList = async (arg) => {
     const {
-        conn, numPage, ty, srchWord
+        conn, numPage, ty, srchTitle, srchAry
     } = arg;
 
     const limit = 10;
     const offset = (numPage - 1) * 10;
 
     if (ty === '1') { // 태그 검색
-        const tag = srchWord;
-        const totCnt = await DEV_LINK.select2({ conn, tag });
+        // 링크 카운트
+        const totCnt = await DEV_LINK.select2({ conn, srchAry });
 
         if (totCnt) {
-            const devLinkList = await DEV_LINK.select1({
-                conn, tag, offset, limit
+            // 태그 배열에 속한 태그를 모두 가지고 있는 링크 인덱스
+            const idxList = await DEV_LINK.select1({
+                conn, srchAry, offset, limit
             });
+            const devLinkIdxList = idxList.map(({ idx }) => idx);
+
+            // 인덱스 배열에 해당하는 제목, url 로드
+            const devLinkList = await DEV_LINK.select6({ conn, devLinkIdxList });
+
             return { totCnt, devLinkList };
         } else {
             return { totCnt };
         }
     } else { // 제목 검색
-        const title = srchWord;
-        const totCnt = await DEV_LINK.select4({ conn, title });
+        const totCnt = await DEV_LINK.select4({ conn, title: srchTitle });
 
         if (totCnt) {
             const devLinkList = await DEV_LINK.select3({
-                conn, title, offset, limit
+                conn, title: srchTitle, offset, limit
             });
             return { totCnt, devLinkList };
         } else {
@@ -116,17 +121,10 @@ exports.getLinkList = async (arg) => {
 exports.getLinkByIdx = async (arg) => {
     const { conn, devLinkIdx } = arg;
 
-    const devLinkAry = await DEV_LINK.select5({ conn, devLinkIdx });
-
-    const [{ idx, title, url }] = devLinkAry;
-
-    const tagAry = [];
-    devLinkAry.forEach(({ tag }) => {
-        tagAry.push(tag);
-    });
+    const { tagAry, ...devLink } = await DEV_LINK.select5({ conn, devLinkIdx });
 
     return {
-        devLink: { idx, title, url },
-        tagAry
+        devLink,
+        tagAry: JSON.parse(tagAry)
     };
 };

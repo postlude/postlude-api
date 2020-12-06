@@ -30,7 +30,21 @@ const select1 = async (arg) => {
     return result;
 };
 
+/**
+ * @description 실행문에 등록된 모든 태그 로드
+ * @param {Object} arg { conn }
+ * @returns {Array}
+ */
+const select2 = async (arg) => {
+    const { conn } = arg;
+
+    const [result] = await conn.execute(TAG.select2);
+
+    return result;
+};
+
 module.exports = {
     insert1,
-    select1
+    select1,
+    select2
 };

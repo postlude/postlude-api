@@ -1,25 +1,25 @@
 /**
- * @fileoverview application/dev_link/cntlr/dev_link_cntlr.js
+ * @fileoverview application/exec_stmt/cntlr/exec_stmt_cntlr.js
  */
 
 const MYSQL = require('@/config/mysql');
 const { RSPNS } = require('@/config/dfn');
-const DEV_LINK_SVC = require('../svc/dev_link_svc');
+const EXEC_STMT_SVC = require('../svc/exec_stmt_svc');
 
 /**
- * @description 개발 문서 생성 API
+ * @description 실행문 생성 API
  */
-exports.addLink = async (req, res) => {
+exports.addExecStmt = async (req, res) => {
     let conn = null;
 
     try {
-        const { devLink, tagAry } = req.body;
+        const { execStmt, tagAry } = req.body;
 
-        if (devLink && Array.isArray(tagAry) && tagAry.length) {
+        if (execStmt && Array.isArray(tagAry) && tagAry.length) {
             conn = await MYSQL.getConn();
             await conn.beginTransaction();
 
-            await DEV_LINK_SVC.addLink({ conn, devLink, tagAry });
+            await EXEC_STMT_SVC.addExecStmt({ conn, execStmt, tagAry });
 
             await conn.commit();
             res.send(RSPNS.SUCCES);
@@ -40,21 +40,54 @@ exports.addLink = async (req, res) => {
 };
 
 /**
- * @description 개발 문서 삭제 API
+ * @description 실행문 1개 로드 API
  */
-exports.rmLink = async (req, res) => {
+exports.getExecStmt = async (req, res) => {
     let conn = null;
 
     try {
         const { idx } = req.params;
 
-        const devLinkIdx = parseInt(idx, 10);
+        const execStmtIdx = parseInt(idx, 10);
 
-        if (Number.isFinite(devLinkIdx)) {
+        if (Number.isFinite(execStmtIdx)) {
+            conn = await MYSQL.getConn();
+
+            const result = await EXEC_STMT_SVC.getExecStmtByIdx({ conn, execStmtIdx });
+
+            res.send({
+                ...result,
+                ...RSPNS.SUCCES
+            });
+        } else {
+            res.send(RSPNS.FAIL_INVLD_FIELD);
+        }
+    } catch (err) {
+        console.error(err);
+        res.send(err.rspns || RSPNS.FAIL);
+    } finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+};
+
+/**
+ * @description 실행문 삭제 API
+ */
+exports.rmExecStmt = async (req, res) => {
+    let conn = null;
+
+    try {
+        const { idx } = req.params;
+
+        const execStmtIdx = parseInt(idx, 10);
+
+        if (Number.isFinite(execStmtIdx)) {
             conn = await MYSQL.getConn();
             await conn.beginTransaction();
 
-            await DEV_LINK_SVC.rmLink({ conn, devLinkIdx });
+            await EXEC_STMT_SVC.rmExecStmtByIdx({ conn, execStmtIdx });
 
             await conn.commit();
             res.send(RSPNS.SUCCES);
@@ -75,19 +108,19 @@ exports.rmLink = async (req, res) => {
 };
 
 /**
- * @description 개발 문서 수정 API
+ * @description 실행문 수정 API
  */
-exports.mdfyLink = async (req, res) => {
+exports.mdfyExecStmt = async (req, res) => {
     let conn = null;
 
     try {
-        const { devLink, tagAry } = req.body;
+        const { execStmt, tagAry } = req.body;
 
-        if (devLink && Array.isArray(tagAry) && tagAry.length) {
+        if (execStmt && Array.isArray(tagAry) && tagAry.length) {
             conn = await MYSQL.getConn();
             await conn.beginTransaction();
 
-            await DEV_LINK_SVC.mdfyLink({ conn, devLink, tagAry });
+            await EXEC_STMT_SVC.mdfyExecStmt({ conn, execStmt, tagAry });
 
             await conn.commit();
             res.send(RSPNS.SUCCES);
@@ -132,9 +165,9 @@ const chckParam = (arg) => {
 };
 
 /**
- * @description 개발 문서 검색 API
+ * @description 실행문 검색 API
  */
-exports.getLinkList = async (req, res) => {
+exports.getExecStmtList = async (req, res) => {
     let conn = null;
 
     try {
@@ -152,42 +185,9 @@ exports.getLinkList = async (req, res) => {
         if (isValid) {
             conn = await MYSQL.getConn();
 
-            const result = await DEV_LINK_SVC.getLinkList({
+            const result = await EXEC_STMT_SVC.getExecStmtList({
                 conn, numPage, ty, srchTitle, srchAry
             });
-
-            res.send({
-                ...result,
-                ...RSPNS.SUCCES
-            });
-        } else {
-            res.send(RSPNS.FAIL_INVLD_FIELD);
-        }
-    } catch (err) {
-        console.error(err);
-        res.send(err.rspns || RSPNS.FAIL);
-    } finally {
-        if (conn) {
-            conn.release();
-        }
-    }
-};
-
-/**
- * @description 개발 문서 1개 로드 API
- */
-exports.getLink = async (req, res) => {
-    let conn = null;
-
-    try {
-        const { idx } = req.params;
-
-        const devLinkIdx = parseInt(idx, 10);
-
-        if (Number.isFinite(devLinkIdx)) {
-            conn = await MYSQL.getConn();
-
-            const result = await DEV_LINK_SVC.getLinkByIdx({ conn, devLinkIdx });
 
             res.send({
                 ...result,

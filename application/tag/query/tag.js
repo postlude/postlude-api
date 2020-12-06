@@ -34,11 +34,28 @@ const select1 = `
         T.TAG ASC
 `;
 
+const select2 = `
+    SELECT
+        T.TAG AS tag,
+        COUNT(T.IDX) AS cnt
+    FROM
+        EXEC_STMT_TAG ST
+    INNER JOIN
+        TAG T
+    ON
+        ST.TAG_IDX = T.IDX
+    GROUP BY
+        ST.TAG_IDX
+    ORDER BY
+        T.TAG ASC
+`;
+
 /* ================================================== [UPDATE] ================================================== */
 
 /* ================================================== [DELETE] ================================================== */
 
 module.exports = {
     insert1,
-    select1
+    select1,
+    select2
 };

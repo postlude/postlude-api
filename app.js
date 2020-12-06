@@ -9,17 +9,17 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('@/config/mysql');
-const { clientIp, chckIp } = require('@/routes/middleware');
+const { setClntIp, chckIp } = require('@/routes/middleware');
 
 const app = express();
 const port = 3000;
 
-app.use(clientIp);
+app.use(setClntIp);
 app.use(chckIp);
 app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan((tkn, req, res) => {
-    const ip = req.clientIp;
+    const ip = req.clntIp;
     const method = tkn.method(req, res);
     const url = tkn.url(req, res);
     const status = tkn.status(req, res);
@@ -29,6 +29,7 @@ app.use(morgan((tkn, req, res) => {
 
 app.use('/dev-link', require('@/routes/dev_link_router'));
 app.use('/tag', require('@/routes/tag_router'));
+app.use('/exec-stmt', require('@/routes/exec_stmt_router'));
 
 app.listen(port, async () => {
     console.log('==================== [POSTLUDE API] ====================');

@@ -1,16 +1,16 @@
 /**
- * @fileoverview application/dev_link/query/dev_link.js
+ * @fileoverview application/exec_stmt/query/exec_stmt.js
  */
 
 /* ================================================== [INSERT] ================================================== */
 
 const insert1 = `
     INSERT INTO
-        DEV_LINK (
-            TITLE, URL
+        EXEC_STMT (
+            TITLE, STMT, DC
         )
     VALUES (
-        :title, :url
+        :title, :stmt, :dc
     )
 `;
 
@@ -18,27 +18,25 @@ const insert1 = `
 
 const select1 = `
     SELECT
-        L.IDX AS idx
+        S.IDX AS idx,
+        S.TITLE AS title,
+        S.STMT AS stmt,
+        S.DC AS dc,
+        CONCAT('[', GROUP_CONCAT(JSON_QUOTE(T.TAG)), ']') AS tagAry
     FROM
-        DEV_LINK L
+        EXEC_STMT S
     INNER JOIN
-        DEV_LINK_TAG LT
+        EXEC_STMT_TAG ST
     ON
-        L.IDX = LT.DEV_LINK_IDX
+        S.IDX = ST.EXEC_STMT_IDX
     INNER JOIN
         TAG T
     ON
-        LT.TAG_IDX = T.IDX
+        ST.TAG_IDX = T.IDX
     WHERE
-        T.TAG IN (?)
+        S.IDX = :execStmtIdx
     GROUP BY
-        L.IDX
-    HAVING
-        COUNT(L.IDX) = ?
-    ORDER BY
-        L.IDX ASC
-    LIMIT
-        ?, ?
+        S.IDX
 `;
 
 const select2 = `
@@ -46,91 +44,93 @@ const select2 = `
         COUNT(idx) AS cnt
     FROM (
         SELECT
-            L.IDX AS idx
+            S.IDX AS idx
         FROM
-            DEV_LINK L
+            EXEC_STMT S
         INNER JOIN
-            DEV_LINK_TAG LT
+            EXEC_STMT_TAG ST
         ON
-            L.IDX = LT.DEV_LINK_IDX
+            S.IDX = ST.EXEC_STMT_IDX
         INNER JOIN
             TAG T
         ON
-            LT.TAG_IDX = T.IDX
+            ST.TAG_IDX = T.IDX
         WHERE
             T.TAG IN (?)
         GROUP BY
-            L.IDX
+            S.IDX
         HAVING
-            COUNT(L.IDX) = ?
+            COUNT(S.IDX) = ?
     ) A
 `;
 
 const select3 = `
     SELECT
-        IDX AS idx,
-        TITLE AS title,
-        URL AS url
+        S.IDX AS idx
     FROM
-        DEV_LINK
+        EXEC_STMT S
+    INNER JOIN
+        EXEC_STMT_TAG ST
+    ON
+        S.IDX = ST.EXEC_STMT_IDX
+    INNER JOIN
+        TAG T
+    ON
+        ST.TAG_IDX = T.IDX
     WHERE
-        TITLE LIKE :title
+        T.TAG IN (?)
+    GROUP BY
+        S.IDX
+    HAVING
+        COUNT(S.IDX) = ?
+    ORDER BY
+        S.IDX ASC
     LIMIT
-        :offset, :limit
+        ?, ?
 `;
 
 const select4 = `
     SELECT
-        COUNT(IDX) AS cnt
-    FROM
-        DEV_LINK
-    WHERE
-        TITLE LIKE :title
-`;
-
-const select5 = `
-    SELECT
-        D.IDX AS idx,
-        D.TITLE AS title,
-        D.URL AS url,
-        CONCAT('[', GROUP_CONCAT(JSON_QUOTE(T.TAG)), ']') AS tagAry
-    FROM
-        DEV_LINK D
-    INNER JOIN
-        DEV_LINK_TAG L
-    ON
-        D.IDX = L.DEV_LINK_IDX
-    INNER JOIN
-        TAG T
-    ON
-        L.TAG_IDX = T.IDX
-    WHERE
-        D.IDX = :devLinkIdx
-    GROUP BY
-        D.IDX
-`;
-
-const select6 = `
-    SELECT
         IDX AS idx,
-        TITLE AS title,
-        URL AS url
+        TITLE AS title
     FROM
-        DEV_LINK
+        EXEC_STMT
     WHERE
         IDX IN (?)
     ORDER BY
         IDX ASC
 `;
 
+const select5 = `
+    SELECT
+        COUNT(IDX) AS cnt
+    FROM
+        EXEC_STMT
+    WHERE
+        TITLE LIKE :title
+`;
+
+const select6 = `
+    SELECT
+        IDX AS idx,
+        TITLE AS title
+    FROM
+        EXEC_STMT
+    WHERE
+        TITLE LIKE :title
+    LIMIT
+        :offset, :limit
+`;
+
 /* ================================================== [UPDATE] ================================================== */
 
 const update1 = `
     UPDATE
-        DEV_LINK
+        EXEC_STMT
     SET
         TITLE = :title,
-        URL = :url
+        STMT = :stmt,
+        DC = :dc
     WHERE
         IDX = :idx
 `;
@@ -139,9 +139,9 @@ const update1 = `
 
 const delete1 = `
     DELETE FROM
-        DEV_LINK
+        EXEC_STMT
     WHERE
-        IDX = :idx
+        IDX = :execStmtIdx
 `;
 
 module.exports = {

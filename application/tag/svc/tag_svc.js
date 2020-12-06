@@ -42,8 +42,11 @@ exports.saveTagAry = async (arg) => {
 exports.getTagList = async (arg) => {
     const { conn, tagTy } = arg;
 
-    if (tagTy === TAG_TY.LINK) {
+    if (tagTy === TAG_TY.DEV_LINK) {
         const tagList = await TAG.select1({ conn });
+        return tagList;
+    } else if (tagTy === TAG_TY.EXEC_STMT) {
+        const tagList = await TAG.select2({ conn });
         return tagList;
     } else {
         throw new CstmErr('INVALID TAG TYPE', RSPNS.FAIL_INVLD_FIELD);
