@@ -30,6 +30,7 @@ app.use(morgan((tkn, req, res) => {
 app.use('/dev-link', require('@/routes/dev_link_router'));
 app.use('/tag', require('@/routes/tag_router'));
 app.use('/exec-stmt', require('@/routes/exec_stmt_router'));
+app.use('/user', require('@/routes/user_router'));
 
 app.listen(port, async () => {
     console.log('==================== [POSTLUDE API] ====================');
