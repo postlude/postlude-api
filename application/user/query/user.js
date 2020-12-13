@@ -8,6 +8,7 @@
 
 const select1 = `
     SELECT
+        IDX AS idx,
         PW AS orgnPw,
         SHA2(:pw, 224) AS inptPw
     FROM

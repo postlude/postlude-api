@@ -39,10 +39,10 @@ exports.sgnn = async (req, res) => {
 
         if (isValid) {
             conn = await MYSQL.getConn();
-            const result = await USER_SVC.sgnn({ conn, user });
+            const tkn = await USER_SVC.sgnn({ conn, user });
 
             res.send({
-                ...result,
+                tkn,
                 ...RSPNS.SUCCES
             });
         } else {
