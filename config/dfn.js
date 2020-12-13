@@ -11,7 +11,8 @@ exports.RSPNS = {
     FAIL_INVLD_FIELD: { code: 2001 },
     FAIL_QUERY_EXEC: { code: 2002 },
     FAIL_NOT_EXISTED_DATA: { code: 2003 },
-    FAIL_INVLD_PW: { code: 2004 }
+    FAIL_INVLD_PW: { code: 2004 },
+    FAIL_TKN: { code: 2005 }
 };
 
 /**

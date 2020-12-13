@@ -9,7 +9,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('@/config/mysql');
-const { setClntIp, chckIp } = require('@/routes/middleware');
+const { setClntIp, chckIp, chckTkn } = require('@/routes/middleware');
 
 const app = express();
 const port = 3000;
@@ -26,6 +26,7 @@ app.use(morgan((tkn, req, res) => {
     const rspnsTime = tkn['response-time'](req, res);
     return `${ip} - [${method}] ${url} ${status} ${rspnsTime} ms`;
 }));
+app.use(chckTkn);
 
 app.use('/dev-link', require('@/routes/dev_link_router'));
 app.use('/tag', require('@/routes/tag_router'));
