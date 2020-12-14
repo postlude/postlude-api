@@ -92,7 +92,8 @@ const select3 = `
 const select4 = `
     SELECT
         IDX AS idx,
-        TITLE AS title
+        TITLE AS title,
+        STMT AS stmt
     FROM
         EXEC_STMT
     WHERE
@@ -113,7 +114,8 @@ const select5 = `
 const select6 = `
     SELECT
         IDX AS idx,
-        TITLE AS title
+        TITLE AS title,
+        STMT AS stmt
     FROM
         EXEC_STMT
     WHERE
