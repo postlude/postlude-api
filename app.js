@@ -6,7 +6,6 @@ global.CstmErr = require('@/config/cstm_err');
 
 const express = require('express');
 const morgan = require('morgan');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('@/config/mysql');
 const { setClntIp, chckIp, chckTkn } = require('@/routes/middleware');
@@ -17,7 +16,7 @@ const port = 3000;
 app.use(setClntIp);
 app.use(chckIp);
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(morgan((tkn, req, res) => {
     const ip = req.clntIp;
     const method = tkn.method(req, res);
