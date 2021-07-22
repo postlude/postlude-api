@@ -1,9 +1,15 @@
 FROM node:14
 
-RUN npm install -g pm2 \
-    && pm2 install pm2-logrotate@latest \
-    && pm2 set pm2-logrotate:rotateInterval '0 0 * * *'
+ENV SERVER_HOME /usr/src/postlude-api
 
-ARG DISABLE_CACHE
+RUN mkdir ${SERVER_HOME}
 
-RUN pm2 -v
+COPY . ${SERVER_HOME}
+
+WORKDIR ${SERVER_HOME}
+
+RUN npm i \
+    && npx pm2 install pm2-logrotate@latest \
+    && npx pm2 set pm2-logrotate:rotateInterval '0 0 * * *'
+
+CMD ["npx", "pm2-runtime", "start", "ecosystem.config.js"]
