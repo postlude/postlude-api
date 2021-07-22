@@ -2,10 +2,10 @@
     "name": "postlude-api",
     "version": "1.3.1",
     "description": "",
-    "main": "index.js",
+    "main": "app.js",
     "scripts": {
-        "start": "pm2 start ecosystem.config.js",
-        "stop": "pm2 stop ecosystem.config.js && pm2 delete ecosystem.config.js"
+        "start": "npx pm2 start ecosystem.config.js",
+        "stop": "npx pm2 stop ecosystem.config.js && npx pm2 delete ecosystem.config.js"
     },
     "repository": {
         "type": "git",
@@ -25,7 +25,8 @@
         "jsonwebtoken": "^8.5.1",
         "module-alias": "^2.2.2",
         "morgan": "^1.10.0",
-        "mysql2": "^2.2.5"
+        "mysql2": "^2.2.5",
+        "pm2": "^5.1.0"
     },
     "devDependencies": {
         "eslint": "^7.5.0",
