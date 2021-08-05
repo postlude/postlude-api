@@ -2,8 +2,8 @@
  * @fileoverview application/user/cntlr/user_cntlr.js
  */
 
-const MYSQL = require('@/config/mysql');
 const { RSPNS } = require('@/config/dfn');
+const MYSQL = require('@/config/mysql');
 const USER_SVC = require('../svc/user_svc');
 
 /**
@@ -29,7 +29,7 @@ const chckSgnnParam = (arg) => {
 /**
  * @description 로그인 API
  */
-exports.sgnn = async (req, res) => {
+const sgnn = async (req, res) => {
     let conn = null;
 
     try {
@@ -56,4 +56,8 @@ exports.sgnn = async (req, res) => {
             conn.release();
         }
     }
+};
+
+module.exports = {
+    sgnn
 };

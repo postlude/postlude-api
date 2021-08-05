@@ -25,7 +25,7 @@ const saveTag = async (tag, arg) => {
  * @param {Object} arg { conn, tagAry }
  * @returns {Array} tagIdxAry
  */
-exports.saveTagAry = async (arg) => {
+const saveTagAry = async (arg) => {
     const { conn, tagAry } = arg;
 
     const tagIdxAry = [];
@@ -39,7 +39,7 @@ exports.saveTagAry = async (arg) => {
  * @param {Object} arg { conn, tagTy }
  * @returns {Array} tagList
  */
-exports.getTagList = async (arg) => {
+const getTagList = async (arg) => {
     const { conn, tagTy } = arg;
 
     if (tagTy === TAG_TY.DEV_LINK) {
@@ -51,4 +51,9 @@ exports.getTagList = async (arg) => {
     } else {
         throw new CstmErr('INVALID TAG TYPE', RSPNS.FAIL_INVLD_FIELD);
     }
+};
+
+module.exports = {
+    saveTagAry,
+    getTagList
 };

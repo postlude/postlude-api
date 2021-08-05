@@ -1,5 +1,6 @@
 /**
  * @fileoverview application/exec_stmt/exec/exec_stmt.js
+ * @typedef { import('mysql2/promise').Connection } connection
  */
 
 const EXEC_STMT = require('../query/exec_stmt');

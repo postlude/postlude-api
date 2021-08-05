@@ -10,7 +10,7 @@ const { SECRET } = require('@/config/jwt');
 /**
   * @description 클라이언트 아이피 세팅 미들웨어
   */
-exports.setClntIp = (req, res, next) => {
+const setClntIp = (req, res, next) => {
     const {
         headers: { 'x-forwarded-for': ip1 },
         connection: { remoteAddress: ip2 }
@@ -24,7 +24,7 @@ exports.setClntIp = (req, res, next) => {
 /**
  * @description 아이피 체크 미들웨어. 한국만 허용
  */
-exports.chckIp = (req, res, next) => {
+const chckIp = (req, res, next) => {
     if (IS_PROD) {
         const { clntIp } = req;
         const ipInfo = geoip.lookup(clntIp);
@@ -46,7 +46,7 @@ exports.chckIp = (req, res, next) => {
  * @description 토큰 체크 미들웨어
  * GET 요청 or 로그인 api 호출이 아닌 경우에는 토큰이 반드시 필요
  */
-exports.chckTkn = (req, res, next) => {
+const chckTkn = (req, res, next) => {
     try {
         const { authorization } = req.headers;
 
@@ -63,4 +63,10 @@ exports.chckTkn = (req, res, next) => {
         console.error(err);
         res.send(RSPNS.FAIL_TKN);
     }
+};
+
+module.exports = {
+    setClntIp,
+    chckIp,
+    chckTkn
 };

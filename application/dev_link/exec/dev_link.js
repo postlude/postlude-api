@@ -1,5 +1,6 @@
 /**
  * @fileoverview application/dev_doc/exec/dev_doc.js
+ * @typedef { import('mysql2/promise').Connection } connection
  */
 
 const DEV_LINK = require('../query/dev_link');

@@ -3,7 +3,9 @@
  * JWT 관련 설정 값
  */
 
+const { JWT_SECRET } = require('@/config/env');
+
 module.exports = {
-    SECRET: 'vnZbVnV6K3Ke85UJ7etUt7KWyM65bd',
+    SECRET: JWT_SECRET || '123456789',
     OPTN: { expiresIn: '1d' } // [default] algorithm: 'HS256'
 };

@@ -3,7 +3,7 @@ module.exports = {
         name: 'postlude-api',
         script: './app.js',
         watch: true,
-        ignore_watch: ['.git', 'logs', 'node_modules'],
+        ignore_watch: ['.git', '.github', 'logs', 'node_modules'],
         // env: {
         //     "NODE_ENV": "development",
         // },

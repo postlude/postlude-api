@@ -1,5 +1,6 @@
 /**
  * @fileoverview application/user/exec/user.js
+ * @typedef { import('mysql2/promise').Connection } connection
  */
 
 const USER = require('../query/user');

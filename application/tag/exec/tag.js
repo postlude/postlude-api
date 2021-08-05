@@ -1,5 +1,6 @@
 /**
  * @fileoverview application/tag/exec/tag.js
+ * @typedef { import('mysql2/promise').Connection } connection
  */
 
 const TAG = require('../query/tag');

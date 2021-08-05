@@ -1,7 +1,8 @@
 require('module-alias/register');
+const { NODE_ENV } = require('@/config/env');
 
-global.ENV = process.env.NODE_ENV || 'development';
-global.IS_PROD = ENV === 'production';
+const ENV = NODE_ENV || 'DEV';
+global.IS_PROD = ENV === 'PROD';
 global.CstmErr = require('@/config/cstm_err');
 
 const express = require('express');
@@ -34,8 +35,8 @@ app.use('/user', require('@/routes/user_router'));
 
 app.listen(port, async () => {
     console.log('==================== [POSTLUDE API] ====================');
-    console.log(`- ENV : ${ENV}`);
-    console.log(`- PORT : ${port}`);
+    console.log(`ENV : ${ENV}`);
+    console.log(`PORT : ${port}`);
     await mysql.testConn();
     console.log('========================================================');
 });

@@ -25,7 +25,7 @@ const bulkSaveTagLink = async (arg) => {
  * @description 실행문 생성
  * @param {Object} arg { conn, execStmt, tagAry }
  */
-exports.addExecStmt = async (arg) => {
+const addExecStmt = async (arg) => {
     const { conn, execStmt, tagAry } = arg;
 
     const execStmtIdx = await EXEC_STMT.insert1({ conn, execStmt });
@@ -40,7 +40,7 @@ exports.addExecStmt = async (arg) => {
  * @param {Object} arg { conn, execStmtIdx }
  * @returns {Object} { execStmt, tagAry }
  */
-exports.getExecStmtByIdx = async (arg) => {
+const getExecStmtByIdx = async (arg) => {
     const { conn, execStmtIdx } = arg;
 
     const { tagAry, ...execStmt } = await EXEC_STMT.select1({ conn, execStmtIdx });
@@ -55,7 +55,7 @@ exports.getExecStmtByIdx = async (arg) => {
  * @description 실행문 삭제
  * @param {Object} arg { conn, execStmtIdx }
  */
-exports.rmExecStmtByIdx = async (arg) => {
+const rmExecStmtByIdx = async (arg) => {
     const { conn, execStmtIdx } = arg;
 
     await EXEC_STMT_TAG.delete1({ conn, execStmtIdx });
@@ -67,7 +67,7 @@ exports.rmExecStmtByIdx = async (arg) => {
  * @description 실행문 수정
  * @param {Object} arg { conn, execStmt, tagAry }
  */
-exports.mdfyExecStmt = async (arg) => {
+const mdfyExecStmt = async (arg) => {
     const { conn, execStmt, tagAry } = arg;
     const { idx: execStmtIdx } = execStmt;
 
@@ -89,7 +89,7 @@ exports.mdfyExecStmt = async (arg) => {
  * @param {Object} arg { conn, numPage, ty, srchTitle, srchAry }
  * @returns {Object} { totCnt, execStmtList }
  */
-exports.getExecStmtList = async (arg) => {
+const getExecStmtList = async (arg) => {
     const {
         conn, numPage, ty, srchTitle, srchAry
     } = arg;
@@ -127,4 +127,12 @@ exports.getExecStmtList = async (arg) => {
             return { totCnt };
         }
     }
+};
+
+module.exports = {
+    addExecStmt,
+    getExecStmtByIdx,
+    rmExecStmtByIdx,
+    mdfyExecStmt,
+    getExecStmtList
 };

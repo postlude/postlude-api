@@ -25,7 +25,7 @@ const issuTkn = async (arg) => {
  * @param {Object} arg { conn, user }
  * @returns {Object} {}
  */
-exports.sgnn = async (arg) => {
+const sgnn = async (arg) => {
     const { conn, user } = arg;
 
     const pwInfo = await USER.select1({ conn, user });
@@ -43,4 +43,8 @@ exports.sgnn = async (arg) => {
     } else {
         throw new CstmErr('NOT EXISTED USER', RSPNS.FAIL_NOT_EXISTED_DATA);
     }
+};
+
+module.exports = {
+    sgnn
 };

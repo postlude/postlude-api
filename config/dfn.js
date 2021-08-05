@@ -5,7 +5,7 @@
 /**
  * @description response 코드
  */
-exports.RSPNS = {
+const RSPNS = {
     SUCCES: { code: 1000 },
     FAIL: { code: 2000 },
     FAIL_INVLD_FIELD: { code: 2001 },
@@ -18,7 +18,12 @@ exports.RSPNS = {
 /**
  * @description 태그 타입
  */
-exports.TAG_TY = {
+const TAG_TY = {
     DEV_LINK: 1,
     EXEC_STMT: 2
+};
+
+module.exports = {
+    RSPNS,
+    TAG_TY
 };

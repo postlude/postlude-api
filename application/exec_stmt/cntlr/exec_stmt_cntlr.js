@@ -2,14 +2,14 @@
  * @fileoverview application/exec_stmt/cntlr/exec_stmt_cntlr.js
  */
 
-const MYSQL = require('@/config/mysql');
 const { RSPNS } = require('@/config/dfn');
+const MYSQL = require('@/config/mysql');
 const EXEC_STMT_SVC = require('../svc/exec_stmt_svc');
 
 /**
  * @description 실행문 생성 API
  */
-exports.addExecStmt = async (req, res) => {
+const addExecStmt = async (req, res) => {
     let conn = null;
 
     try {
@@ -42,7 +42,7 @@ exports.addExecStmt = async (req, res) => {
 /**
  * @description 실행문 1개 로드 API
  */
-exports.getExecStmt = async (req, res) => {
+const getExecStmt = async (req, res) => {
     let conn = null;
 
     try {
@@ -75,7 +75,7 @@ exports.getExecStmt = async (req, res) => {
 /**
  * @description 실행문 삭제 API
  */
-exports.rmExecStmt = async (req, res) => {
+const rmExecStmt = async (req, res) => {
     let conn = null;
 
     try {
@@ -110,7 +110,7 @@ exports.rmExecStmt = async (req, res) => {
 /**
  * @description 실행문 수정 API
  */
-exports.mdfyExecStmt = async (req, res) => {
+const mdfyExecStmt = async (req, res) => {
     let conn = null;
 
     try {
@@ -167,7 +167,7 @@ const chckParam = (arg) => {
 /**
  * @description 실행문 검색 API
  */
-exports.getExecStmtList = async (req, res) => {
+const getExecStmtList = async (req, res) => {
     let conn = null;
 
     try {
@@ -204,4 +204,12 @@ exports.getExecStmtList = async (req, res) => {
             conn.release();
         }
     }
+};
+
+module.exports = {
+    addExecStmt,
+    getExecStmt,
+    rmExecStmt,
+    mdfyExecStmt,
+    getExecStmtList
 };

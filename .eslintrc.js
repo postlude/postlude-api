@@ -13,7 +13,7 @@ const eslint = {
     ],
     globals: {
         CstmErr: true,
-        ENV: true,
+        // ENV: true,
         IS_PROD: true
     },
     rules: {
@@ -25,7 +25,7 @@ const eslint = {
         'no-param-reassign': ['error', { props: false }], // 매개 변수 객체 내용 변경 허용
         'no-plusplus': 0, // 증감 연산자 허용
         'comma-dangle': ['error', 'never'], // [eslint] 마지막 comma 없는 것으로
-        'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off', // 추가 설정 확인 요망
+        'no-console': 'off',
         'no-debugger': 'error', // [default] debugger 사용 불가
         'max-len': ['error', {
             code: 100, // [default-airbnb] 1줄에 100자 이내로 작성

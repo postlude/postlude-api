@@ -2,14 +2,14 @@
  * @fileoverview application/tag/cntlr/tag_cntlr.js
  */
 
-const MYSQL = require('@/config/mysql');
 const { RSPNS } = require('@/config/dfn');
+const MYSQL = require('@/config/mysql');
 const TAG_SVC = require('../svc/tag_svc');
 
 /**
  * @description 모든 태그 리스트 로드 API
  */
-exports.getTagList = async (req, res) => {
+const getTagList = async (req, res) => {
     let conn = null;
 
     try {
@@ -37,4 +37,8 @@ exports.getTagList = async (req, res) => {
             conn.release();
         }
     }
+};
+
+module.exports = {
+    getTagList
 };

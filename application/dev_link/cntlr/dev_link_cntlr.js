@@ -2,14 +2,14 @@
  * @fileoverview application/dev_link/cntlr/dev_link_cntlr.js
  */
 
-const MYSQL = require('@/config/mysql');
 const { RSPNS } = require('@/config/dfn');
+const MYSQL = require('@/config/mysql');
 const DEV_LINK_SVC = require('../svc/dev_link_svc');
 
 /**
  * @description 개발 문서 생성 API
  */
-exports.addLink = async (req, res) => {
+const addLink = async (req, res) => {
     let conn = null;
 
     try {
@@ -42,7 +42,7 @@ exports.addLink = async (req, res) => {
 /**
  * @description 개발 문서 삭제 API
  */
-exports.rmLink = async (req, res) => {
+const rmLink = async (req, res) => {
     let conn = null;
 
     try {
@@ -77,7 +77,7 @@ exports.rmLink = async (req, res) => {
 /**
  * @description 개발 문서 수정 API
  */
-exports.mdfyLink = async (req, res) => {
+const mdfyLink = async (req, res) => {
     let conn = null;
 
     try {
@@ -134,7 +134,7 @@ const chckParam = (arg) => {
 /**
  * @description 개발 문서 검색 API
  */
-exports.getLinkList = async (req, res) => {
+const getLinkList = async (req, res) => {
     let conn = null;
 
     try {
@@ -176,7 +176,7 @@ exports.getLinkList = async (req, res) => {
 /**
  * @description 개발 문서 1개 로드 API
  */
-exports.getLink = async (req, res) => {
+const getLink = async (req, res) => {
     let conn = null;
 
     try {
@@ -204,4 +204,12 @@ exports.getLink = async (req, res) => {
             conn.release();
         }
     }
+};
+
+module.exports = {
+    addLink,
+    rmLink,
+    mdfyLink,
+    getLinkList,
+    getLink
 };

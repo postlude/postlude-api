@@ -25,7 +25,7 @@ const bulkSaveTagLink = async (arg) => {
  * @description 개발 문서 저장
  * @param {Object} arg { conn, devLink, tagAry }
  */
-exports.addLink = async (arg) => {
+const addLink = async (arg) => {
     const { conn, devLink, tagAry } = arg;
 
     const devLinkIdx = await DEV_LINK.insert1({ conn, devLink });
@@ -39,7 +39,7 @@ exports.addLink = async (arg) => {
  * @description 개발 문서 삭제
  * @param {Object} arg { conn, devLinkIdx }
  */
-exports.rmLink = async (arg) => {
+const rmLink = async (arg) => {
     const { conn, devLinkIdx } = arg;
 
     await DEV_LINK_TAG.delete1({ conn, devLinkIdx });
@@ -51,7 +51,7 @@ exports.rmLink = async (arg) => {
  * @description 개발 문서 수정
  * @param {Object} arg { conn, devLink, tagAry }
  */
-exports.mdfyLink = async (arg) => {
+const mdfyLink = async (arg) => {
     const { conn, devLink, tagAry } = arg;
 
     // [STEP 1] 개발 문서 수정
@@ -73,7 +73,7 @@ exports.mdfyLink = async (arg) => {
  * @param {Object} arg { conn, numPage, ty, srchTitle, srchAry }
  * @returns {Object} { totCnt, devLinkList }
  */
-exports.getLinkList = async (arg) => {
+const getLinkList = async (arg) => {
     const {
         conn, numPage, ty, srchTitle, srchAry
     } = arg;
@@ -118,7 +118,7 @@ exports.getLinkList = async (arg) => {
  * @param {Object} arg { conn, devLinkIdx }
  * @returns {Object} { devLink, tagAry }
  */
-exports.getLinkByIdx = async (arg) => {
+const getLinkByIdx = async (arg) => {
     const { conn, devLinkIdx } = arg;
 
     const { tagAry, ...devLink } = await DEV_LINK.select5({ conn, devLinkIdx });
@@ -127,4 +127,12 @@ exports.getLinkByIdx = async (arg) => {
         devLink,
         tagAry: JSON.parse(tagAry)
     };
+};
+
+module.exports = {
+    addLink,
+    rmLink,
+    mdfyLink,
+    getLinkList,
+    getLinkByIdx
 };
