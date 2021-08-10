@@ -4,10 +4,13 @@
  */
 
 const mysql = require('mysql2');
-const { MYSQL_HOST, MYSQL_USER, MYSQL_USER_PASSWORD } = require('./env');
+const {
+    MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_USER_PASSWORD
+} = require('./env');
 
 const pool = mysql.createPool({
     host: MYSQL_HOST || 'localhost',
+    port: MYSQL_PORT || 3306,
     user: MYSQL_USER || 'root',
     password: MYSQL_USER_PASSWORD || 'root',
     database: 'postlude',

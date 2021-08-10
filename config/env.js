@@ -5,6 +5,7 @@
 const {
     NODE_ENV,
     MYSQL_HOST,
+    MYSQL_PORT,
     MYSQL_USER,
     MYSQL_USER_PASSWORD,
     JWT_SECRET
@@ -13,6 +14,7 @@ const {
 module.exports = {
     NODE_ENV,
     MYSQL_HOST,
+    MYSQL_PORT,
     MYSQL_USER,
     MYSQL_USER_PASSWORD,
     JWT_SECRET
