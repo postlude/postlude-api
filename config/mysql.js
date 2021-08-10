@@ -45,7 +45,6 @@ const testConn = async () => {
     let conn = null;
     try {
         conn = await getConn();
-        console.log(MYSQL_HOST);
         console.log('[MySQL] Test Connection : SUCCESS');
     } catch (err) {
         console.error('[MySQL] Test Connection : FAIL');
