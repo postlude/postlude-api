@@ -1,8 +1,8 @@
 require('module-alias/register');
 const { NODE_ENV } = require('@/config/env');
 
-const ENV = NODE_ENV || 'DEV';
-global.IS_PROD = ENV === 'PROD';
+const ENV = NODE_ENV || 'development';
+global.IS_PROD = ENV === 'production';
 global.CstmErr = require('@/config/cstm_err');
 
 const express = require('express');
