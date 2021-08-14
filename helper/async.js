@@ -11,7 +11,7 @@ const async = require('async');
  * @param {Function} func 배열의 각 element에 동작시킬 함수
  * @param {Object} arg 추가적으로 전달할 파라미터
  */
-exports.syncAryPrll = async (ary, func, arg) => {
+const syncAryPrll = async (ary, func, arg) => {
     try {
         if (Array.isArray(ary)) {
             await async.eachOf(ary, async (elem, idx) => {
@@ -33,7 +33,7 @@ exports.syncAryPrll = async (ary, func, arg) => {
  * @param {Function} func 배열의 각 element에 동작시킬 함수
  * @param {Object} arg 추가적으로 전달할 파라미터
  */
-exports.syncAryOrdr = async (ary, func, arg) => {
+const syncAryOrdr = async (ary, func, arg) => {
     try {
         if (Array.isArray(ary)) {
             await async.eachOfSeries(ary, async (elem, idx) => {
@@ -46,4 +46,9 @@ exports.syncAryOrdr = async (ary, func, arg) => {
         console.error('[async] syncAryOrdr - ERROR');
         throw err;
     }
+};
+
+module.exports = {
+    syncAryPrll,
+    syncAryOrdr
 };
