@@ -11,7 +11,13 @@ async function bootstrap() {
 		new FastifyAdapter()
 	);
 
-	await app.listen(3000);
+	const port = 3000;
+
+	console.log('==================== [POSTLUDE API] ====================');
+	// console.log(`ENV : ${ENV}`);
+	console.log(`PORT : ${port}`);
+	await app.listen(port);
+	console.log('========================================================');
 }
 
 bootstrap();
