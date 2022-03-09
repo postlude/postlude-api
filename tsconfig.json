@@ -1,0 +1,30 @@
+{
+	// https://www.typescriptlang.org/tsconfig
+	"include": [ "src/**/*" ],
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "es2017",
+		"outDir": "./dist",
+		"baseUrl": "./",
+		"experimentalDecorators": true,
+		"removeComments": true,
+		"noImplicitAny": true,
+		"allowUnreachableCode": false,
+		// "strict": true,
+		//   "declaration": true,
+		//   "emitDecoratorMetadata": true,
+		//   "allowSyntheticDefaultImports": true,
+		//   "sourceMap": true,
+		//   "incremental": true,
+		//   "skipLibCheck": true,
+		//   "strictBindCallApply": false,
+		//   "forceConsistentCasingInFileNames": false,
+		//   "noFallthroughCasesInSwitch": false
+		// "paths": {
+		// 	"app/*": ["app/*"],
+		// 	"config/*": ["app/_config/*"],
+		// 	"lib/*": ["lib/*"],
+		// 	"tests/*": ["tests/*"]
+		// },
+	}
+}
