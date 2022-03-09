@@ -23,8 +23,11 @@
 	"dependencies": {
 		"@nestjs/common": "^8.4.0",
 		"@nestjs/core": "^8.4.0",
+		"@nestjs/typeorm": "^8.0.3",
+		"mysql2": "^2.3.3",
 		"reflect-metadata": "^0.1.13",
-		"rxjs": "^7.5.4"
+		"rxjs": "^7.5.4",
+		"typeorm": "^0.2.45"
 	},
 	"devDependencies": {
 		"@nestjs/platform-fastify": "^8.4.0",

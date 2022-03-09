@@ -13,11 +13,11 @@ async function bootstrap() {
 
 	const port = 3000;
 
-	console.log('==================== [POSTLUDE API] ====================');
+	await app.listen(port);
+
+	console.log('[POSTLUDE API]');
 	// console.log(`ENV : ${ENV}`);
 	console.log(`PORT : ${port}`);
-	await app.listen(port);
-	console.log('========================================================');
 }
 
 bootstrap();
