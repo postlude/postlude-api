@@ -1,5 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DevLinkModule } from './module/dev-link/dev-link.module';
+import { DevLink } from './entity/dev-link.entity';
+import { Tag } from './entity/tag.entity';
+import { DevLinkTag } from './entity/dev-link-tag.entity';
 
 @Module({
 	imports: [
@@ -9,12 +13,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 			port: 3306,
 			username: 'root',
 			password: 'root',
-			database: 'postlude'
-			// entities: [],
+			database: 'postlude',
+			entities: [
+				DevLink,
+				Tag,
+				DevLinkTag
+			],
+			logging: true
 			// synchronize: true
-		})
+		}),
+		DevLinkModule
 	]
-//   controllers: [AppController],
-//   providers: [AppService],
 })
 export class AppModule {}
