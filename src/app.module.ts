@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DevLinkModule } from './module/dev-link/dev-link.module';
 import { DevLink } from './entity/dev-link.entity';
 import { Tag } from './entity/tag.entity';
 import { DevLinkTag } from './entity/dev-link-tag.entity';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
 	imports: [
@@ -23,6 +24,13 @@ import { DevLinkTag } from './entity/dev-link-tag.entity';
 			// synchronize: true
 		}),
 		DevLinkModule
+	],
+	providers: [
+		// DTO에서 class-validator 사용하기 위해 필요
+		{
+			provide: APP_PIPE,
+			useValue: new ValidationPipe({ transform: true })
+		}
 	]
 })
 export class AppModule {}
