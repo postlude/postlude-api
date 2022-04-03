@@ -8,10 +8,10 @@ export class DevLinkRepository extends Repository<DevLink> {
 	 * @param devLinkIdx
 	 */
 	public findOneByIdx(devLinkIdx: number) {
-		return this.createQueryBuilder('d')
-			.select(['d.idx', 'd.title', 'd.url', 'l.tag'])
-			.innerJoin('d.tagList', 'l')
-			.where('d.idx = :idx', { idx: devLinkIdx })
+		return this.createQueryBuilder('l')
+			.select(['l.idx', 'l.title', 'l.url', 't.tag'])
+			.innerJoin('l.tagList', 't')
+			.where('l.idx = :devLinkIdx', { devLinkIdx })
 			.getOne();
 	}
 }
