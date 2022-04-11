@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { AddDevLinkDto, SearchDevLinkParam, SetDevLinkDto } from './dev-link.dto';
 import { DevLinkService } from './dev-link.service';
 
@@ -20,6 +20,13 @@ export class DevLinkController {
 		@Param('idx', ParseIntPipe) devLinkIdx: number
 	) {
 		return this.devLinkService.getDevLink(devLinkIdx);
+	}
+
+	@Delete('/:idx')
+	public removeDevLink(
+		@Param('idx', ParseIntPipe) devLinkIdx: number
+	) {
+		return this.devLinkService.removeDevLink(devLinkIdx);
 	}
 
 	@Post('/')

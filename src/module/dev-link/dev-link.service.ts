@@ -107,4 +107,14 @@ export class DevLinkService {
 		await this.devLinkTagRepository.delete({ devLinkIdx: idx });
 		await this.saveTag(idx, tagList);
 	}
+
+	/**
+	 * @description 개발 링크 삭제
+	 * @param devLinkIdx
+	 */
+	@Transactional()
+	public async removeDevLink(devLinkIdx: number) {
+		await this.devLinkTagRepository.delete({ devLinkIdx });
+		await this.devLinkRepository.delete(devLinkIdx);
+	}
 }
