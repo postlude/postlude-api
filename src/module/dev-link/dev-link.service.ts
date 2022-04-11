@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { SearchDevLinkParam } from './dev-link.dto';
+import { Transactional } from 'typeorm-transactional-cls-hooked';
+import { DevLinkTagRepository } from '../../database/repository/dev-link-tag.repository';
+import { DevLinkRepository } from '../../database/repository/dev-link.repository';
+import { TagRepository } from '../../database/repository/tag.repository';
+import { DevLinkDto, SearchDevLinkParam } from './dev-link.dto';
 import { SearchType } from './dev-link.model';
-import { DevLinkRepository } from './repository/dev-link.repository';
 
 @Injectable()
 export class DevLinkService {
 	constructor(
-		private readonly devLinkRepository: DevLinkRepository
+		private readonly devLinkRepository: DevLinkRepository,
+		private readonly devLinkTagRepository: DevLinkTagRepository,
+		private readonly tagRepository: TagRepository
 	) {}
 
 	/**
@@ -55,5 +60,30 @@ export class DevLinkService {
 				return { totalCount, devLinkList: totalCount ? devLinkList : null };
 			}
 		}
+	}
+
+	/**
+	 * @description 개발 링크 생성
+	 * @param devLinkDto
+	 */
+	@Transactional()
+	public async addDevLink(devLinkDto: DevLinkDto) {
+		const { title, url, tagList } = devLinkDto;
+
+		// bulk upsert tag
+		const tagEntityList = tagList.map((tag) => this.tagRepository.create({ tag }));
+		await this.tagRepository.upsert(tagEntityList, {
+			conflictPaths: ['tag'],
+			skipUpdateIfNoValuesChanged: true
+		});
+		const upsertedTagList = await this.tagRepository.findByTag(tagList);
+
+		// insert dev_link
+		const { identifiers } = await this.devLinkRepository.insert({ title, url });
+		const devLinkIdx = identifiers[0].idx as number;
+
+		// bulk insert dev_link_tag
+		const devLinkTagList = upsertedTagList.map(({ idx }) => ({ devLinkIdx, tagIdx: idx }));
+		await this.devLinkTagRepository.insert(devLinkTagList);
 	}
 }

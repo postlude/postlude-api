@@ -1,10 +1,10 @@
 import { Module, ValidationPipe } from '@nestjs/common';
+import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DevLinkModule } from './module/dev-link/dev-link.module';
+import { DevLinkTag } from './database/entity/dev-link-tag.entity';
 import { DevLink } from './database/entity/dev-link.entity';
 import { Tag } from './database/entity/tag.entity';
-import { DevLinkTag } from './database/entity/dev-link-tag.entity';
-import { APP_PIPE } from '@nestjs/core';
+import { DevLinkModule } from './module/dev-link/dev-link.module';
 
 @Module({
 	imports: [

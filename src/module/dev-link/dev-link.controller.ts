@@ -1,5 +1,5 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
-import { SearchDevLinkParam } from './dev-link.dto';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
+import { DevLinkDto, SearchDevLinkParam } from './dev-link.dto';
 import { DevLinkService } from './dev-link.service';
 
 @Controller('/dev-link')
@@ -20,5 +20,12 @@ export class DevLinkController {
 		@Param('idx', ParseIntPipe) devLinkIdx: number
 	) {
 		return this.devLinkService.getDevLink(devLinkIdx);
+	}
+
+	@Post('/')
+	public addDevLink(
+		@Body() devLinkDto: DevLinkDto
+	) {
+		this.devLinkService.addDevLink(devLinkDto);
 	}
 }

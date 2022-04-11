@@ -1,5 +1,5 @@
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsEnum, IsNumber, IsOptional, Min, MinLength } from 'class-validator';
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, Min, MinLength } from 'class-validator';
 import { SearchType } from './dev-link.model';
 
 export class SearchDevLinkParam {
@@ -20,5 +20,19 @@ export class SearchDevLinkParam {
 	@Transform(({ value }) => (value as string).split(','))
 	@IsArray()
 	public tagList?: string[] | undefined;
+}
+
+export class DevLinkDto {
+	@IsString()
+	@IsNotEmpty()
+	public title: string;
+
+	@IsUrl()
+	@IsNotEmpty()
+	public url: string;
+
+	@IsOptional()
+	@IsString({ each: true })
+	public tagList: string[];
 }
 
