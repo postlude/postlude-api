@@ -22,7 +22,7 @@ export class SearchDevLinkParam {
 	public tagList?: string[] | undefined;
 }
 
-export class DevLinkDto {
+export class AddDevLinkDto {
 	@IsString()
 	@IsNotEmpty()
 	public title: string;
@@ -36,3 +36,8 @@ export class DevLinkDto {
 	public tagList: string[];
 }
 
+export class SetDevLinkDto extends AddDevLinkDto {
+	@IsNumber()
+	@Min(1)
+	public idx: number;
+}

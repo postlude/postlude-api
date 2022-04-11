@@ -3,7 +3,7 @@ import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { DevLinkTagRepository } from '../../database/repository/dev-link-tag.repository';
 import { DevLinkRepository } from '../../database/repository/dev-link.repository';
 import { TagRepository } from '../../database/repository/tag.repository';
-import { DevLinkDto, SearchDevLinkParam } from './dev-link.dto';
+import { AddDevLinkDto, SearchDevLinkParam, SetDevLinkDto } from './dev-link.dto';
 import { SearchType } from './dev-link.model';
 
 @Injectable()
@@ -63,13 +63,11 @@ export class DevLinkService {
 	}
 
 	/**
-	 * @description 개발 링크 생성
-	 * @param devLinkDto
+	 * @description 태그, 태그 연결 생성
+	 * @param devLinkIdx
+	 * @param tagList
 	 */
-	@Transactional()
-	public async addDevLink(devLinkDto: DevLinkDto) {
-		const { title, url, tagList } = devLinkDto;
-
+	private async saveTag(devLinkIdx: number, tagList: string[]) {
 		// bulk upsert tag
 		const tagEntityList = tagList.map((tag) => this.tagRepository.create({ tag }));
 		await this.tagRepository.upsert(tagEntityList, {
@@ -78,12 +76,35 @@ export class DevLinkService {
 		});
 		const upsertedTagList = await this.tagRepository.findByTag(tagList);
 
-		// insert dev_link
-		const { identifiers } = await this.devLinkRepository.insert({ title, url });
-		const devLinkIdx = identifiers[0].idx as number;
-
 		// bulk insert dev_link_tag
 		const devLinkTagList = upsertedTagList.map(({ idx }) => ({ devLinkIdx, tagIdx: idx }));
 		await this.devLinkTagRepository.insert(devLinkTagList);
+	}
+
+	/**
+	 * @description 개발 링크 생성
+	 * @param devLinkDto
+	 */
+	@Transactional()
+	public async addDevLink(devLinkDto: AddDevLinkDto) {
+		const { title, url, tagList } = devLinkDto;
+
+		const { identifiers } = await this.devLinkRepository.insert({ title, url });
+		const devLinkIdx = identifiers[0].idx as number;
+
+		await this.saveTag(devLinkIdx, tagList);
+	}
+
+	/**
+	 * @description 개발 링크 수정
+	 * @param devLinkDto
+	 */
+	@Transactional()
+	public async setDevLink(devLinkDto: SetDevLinkDto) {
+		const { idx, title, url, tagList } = devLinkDto;
+
+		await this.devLinkRepository.update(idx, { title, url });
+		await this.devLinkTagRepository.delete({ devLinkIdx: idx });
+		await this.saveTag(idx, tagList);
 	}
 }
