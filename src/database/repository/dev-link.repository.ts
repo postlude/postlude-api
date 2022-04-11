@@ -1,8 +1,9 @@
-import { EntityRepository, Like, Repository } from 'typeorm';
-import { DevLink } from '../../../entity/dev-link.entity';
+import { EntityRepository, Like } from 'typeorm';
+import { BaseRepository } from 'typeorm-transactional-cls-hooked';
+import { DevLink } from '../entity/dev-link.entity';
 
 @EntityRepository(DevLink)
-export class DevLinkRepository extends Repository<DevLink> {
+export class DevLinkRepository extends BaseRepository<DevLink> {
 	/**
 	 * @description 인덱스로 개발 링크 1개 조회
 	 * @param devLinkIdx
