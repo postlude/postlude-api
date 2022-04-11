@@ -10,9 +10,9 @@
 		"removeComments": true,
 		"noImplicitAny": true,
 		"allowUnreachableCode": false,
+		"emitDecoratorMetadata": true, // @Injectable()을 사용해 DI를 사용하기 위해서 필요
 		// "strict": true,
 		//   "declaration": true,
-		//   "emitDecoratorMetadata": true,
 		//   "allowSyntheticDefaultImports": true,
 		//   "sourceMap": true,
 		//   "incremental": true,

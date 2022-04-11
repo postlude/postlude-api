@@ -24,7 +24,13 @@ module.exports = {
 	ignorePatterns: ['.eslintrc.js', 'dist/**/*', 'express/**/*'],
 	rules: {
 		'indent': 'off',
-		'@typescript-eslint/indent': ['error', 'tab'],
+		'@typescript-eslint/indent': ['error', 'tab', {
+			SwitchCase: 1,
+			ignoredNodes: [
+				'FunctionExpression > .params > :matches(Decorator, :not(:first-child))',
+				'ClassBody.body > PropertyDefinition[decorators.length > 0] > .key'
+			]
+		}],
 
 		'comma-dangle': 'off',
 		'@typescript-eslint/comma-dangle': ['error'],
