@@ -2,7 +2,7 @@ import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 't
 import { Tag } from './tag.entity';
 
 @Entity({ database: 'postlude', name: 'execution_statement' })
-export class DevLink {
+export class ExecutionStatement {
 	@PrimaryGeneratedColumn({ type: 'int', name: 'idx', unsigned: true })
 	idx: number;
 

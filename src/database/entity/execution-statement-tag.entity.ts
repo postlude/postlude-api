@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ database: 'postlude', name: 'execution_statement_tag' })
-export class DevLinkTag {
+export class ExecutionStatementTag {
 	@PrimaryGeneratedColumn({ type: 'int', name: 'idx', unsigned: true })
 	idx: number;
 
