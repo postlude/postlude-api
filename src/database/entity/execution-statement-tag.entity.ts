@@ -10,7 +10,4 @@ export class ExecutionStatementTag {
 
 	@Column({ type: 'int', name: 'tag_idx', unsigned: true })
 	tagIdx: number;
-
-	@Column({ type: 'datetime', name: 'created_at' })
-	createdAt: Date;
 }
