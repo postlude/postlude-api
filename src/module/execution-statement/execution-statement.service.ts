@@ -76,4 +76,14 @@ export class ExecutionStatementService {
 		await this.executionStatementTagRepository.delete({ executionStatementIdx: idx });
 		await this.saveTag(idx, tagList);
 	}
+
+	/**
+	 * @description 실행문 삭제
+	 * @param executionStatementIdx
+	 */
+	@Transactional()
+	public async removeExecutionStatement(executionStatementIdx: number) {
+		await this.executionStatementTagRepository.delete({ executionStatementIdx });
+		await this.executionStatementRepository.delete(executionStatementIdx);
+	}
 }

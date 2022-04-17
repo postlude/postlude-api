@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { AddExecutionStatementDto, SetExecutionStatementDto } from './execution-statement.dto';
 import { ExecutionStatementService } from './execution-statement.service';
 
@@ -13,6 +13,13 @@ export class ExecutionStatementController {
 		@Param('idx', ParseIntPipe) executionStatementIdx: number
 	) {
 		return this.executionStatementService.getExecutionStatement(executionStatementIdx);
+	}
+
+	@Delete('/:idx')
+	public removeExecutionStatement(
+		@Param('idx', ParseIntPipe) executionStatementIdx: number
+	) {
+		this.executionStatementService.removeExecutionStatement(executionStatementIdx);
 	}
 
 	@Post('/')
