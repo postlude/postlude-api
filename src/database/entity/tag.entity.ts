@@ -10,7 +10,4 @@ export class Tag {
 
 	@Column({ type: 'datetime', name: 'created_at' })
 	createdAt: Date;
-
-	@Column({ type: 'datetime', name: 'updated_at' })
-	updatedAt: Date;
 }

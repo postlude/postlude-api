@@ -3,8 +3,11 @@ import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DevLinkTag } from './database/entity/dev-link-tag.entity';
 import { DevLink } from './database/entity/dev-link.entity';
+import { ExecutionStatementTag } from './database/entity/execution-statement-tag.entity';
+import { ExecutionStatement } from './database/entity/execution-statement.entity';
 import { Tag } from './database/entity/tag.entity';
 import { DevLinkModule } from './module/dev-link/dev-link.module';
+import { ExecutionStatementModule } from './module/execution-statement/execution-statement.module';
 
 @Module({
 	imports: [
@@ -18,12 +21,15 @@ import { DevLinkModule } from './module/dev-link/dev-link.module';
 			entities: [
 				DevLink,
 				Tag,
-				DevLinkTag
+				DevLinkTag,
+				ExecutionStatement,
+				ExecutionStatementTag
 			],
 			logging: true
 			// synchronize: true
 		}),
-		DevLinkModule
+		DevLinkModule,
+		ExecutionStatementModule
 	],
 	providers: [
 		// DTO에서 class-validator 사용하기 위해 필요

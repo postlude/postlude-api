@@ -40,7 +40,7 @@ export class DevLinkService {
 	public async getDevLinkList(searchParam: SearchDevLinkParam) {
 		const { type, page, title, tagList }= searchParam;
 
-		const limit = 3;
+		const limit = 10;
 		const offset = (page - 1) * limit;
 
 		switch (type) {
