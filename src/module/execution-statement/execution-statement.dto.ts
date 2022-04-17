@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString, MaxLength, Min, MinLength } from 'class-validator';
 
 export class AddExecutionStatementDto {
 	@IsNotEmpty()
@@ -13,10 +13,17 @@ export class AddExecutionStatementDto {
 
 	@IsOptional()
 	@IsString()
+	@MinLength(1)
 	@MaxLength(500)
-	public description: string;
+	public description: string | null = null;
 
 	@IsOptional()
 	@IsString({ each: true })
 	public tagList: string[];
+}
+
+export class SetExecutionStatementDto extends AddExecutionStatementDto {
+	@IsInt()
+	@Min(1)
+	public idx: number;
 }

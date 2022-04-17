@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
-import { AddExecutionStatementDto } from './execution-statement.dto';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { AddExecutionStatementDto, SetExecutionStatementDto } from './execution-statement.dto';
 import { ExecutionStatementService } from './execution-statement.service';
 
 @Controller('/execution-statement')
@@ -20,5 +20,12 @@ export class ExecutionStatementController {
 		@Body() executionStatementDto: AddExecutionStatementDto
 	) {
 		this.executionStatementService.addExecutionStatement(executionStatementDto);
+	}
+
+	@Put('/')
+	public setExecutionStatement(
+		@Body() executionStatementDto: SetExecutionStatementDto
+	) {
+		this.executionStatementService.setExecutionStatement(executionStatementDto);
 	}
 }

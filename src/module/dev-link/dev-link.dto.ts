@@ -1,5 +1,5 @@
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, Min, MinLength } from 'class-validator';
+import { IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, Min, MinLength } from 'class-validator';
 import { SearchType } from './dev-link.model';
 
 export class SearchDevLinkParam {
@@ -37,7 +37,7 @@ export class AddDevLinkDto {
 }
 
 export class SetDevLinkDto extends AddDevLinkDto {
-	@IsNumber()
+	@IsInt()
 	@Min(1)
 	public idx: number;
 }

@@ -3,7 +3,7 @@ import { ExecutionStatementTagRepository } from 'src/database/repository/executi
 import { ExecutionStatementRepository } from 'src/database/repository/execution-statement.repository';
 import { TagRepository } from 'src/database/repository/tag.repository';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
-import { AddExecutionStatementDto } from './execution-statement.dto';
+import { AddExecutionStatementDto, SetExecutionStatementDto } from './execution-statement.dto';
 
 @Injectable()
 export class ExecutionStatementService {
@@ -62,5 +62,18 @@ export class ExecutionStatementService {
 		const executionStatementIdx = identifiers[0].idx as number;
 
 		await this.saveTag(executionStatementIdx, tagList);
+	}
+
+	/**
+	 * @description 실행문 수정
+	 * @param executionStatementDto
+	 */
+	@Transactional()
+	public async setExecutionStatement(executionStatementDto: SetExecutionStatementDto) {
+		const { tagList, idx, ...executionStatement } = executionStatementDto;
+
+		await this.executionStatementRepository.update(idx, executionStatement);
+		await this.executionStatementTagRepository.delete({ executionStatementIdx: idx });
+		await this.saveTag(idx, tagList);
 	}
 }
