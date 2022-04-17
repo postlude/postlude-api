@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
-import { AddExecutionStatementDto, SetExecutionStatementDto } from './execution-statement.dto';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { AddExecutionStatementDto, SearchExecutionStatementParam, SetExecutionStatementDto } from './execution-statement.dto';
 import { ExecutionStatementService } from './execution-statement.service';
 
 @Controller('/execution-statement')
@@ -7,6 +7,13 @@ export class ExecutionStatementController {
 	constructor(
 		private readonly executionStatementService: ExecutionStatementService
 	) {}
+
+	@Get('/list')
+	public searchExecutionStatement(
+		@Query() searchExecutionStatementParam: SearchExecutionStatementParam
+	) {
+		return this.executionStatementService.getExecutionStatementList(searchExecutionStatementParam);
+	}
 
 	@Get('/:idx')
 	public getExecutionStatement(

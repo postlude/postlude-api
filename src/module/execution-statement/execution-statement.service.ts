@@ -3,7 +3,8 @@ import { ExecutionStatementTagRepository } from 'src/database/repository/executi
 import { ExecutionStatementRepository } from 'src/database/repository/execution-statement.repository';
 import { TagRepository } from 'src/database/repository/tag.repository';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
-import { AddExecutionStatementDto, SetExecutionStatementDto } from './execution-statement.dto';
+import { AddExecutionStatementDto, SearchExecutionStatementParam, SetExecutionStatementDto } from './execution-statement.dto';
+import { SearchType } from './execution-statement.model';
 
 @Injectable()
 export class ExecutionStatementService {
@@ -85,5 +86,34 @@ export class ExecutionStatementService {
 	public async removeExecutionStatement(executionStatementIdx: number) {
 		await this.executionStatementTagRepository.delete({ executionStatementIdx });
 		await this.executionStatementRepository.delete(executionStatementIdx);
+	}
+
+	/**
+	 * @description 실행문 검색
+	 * @param searchParam
+	 */
+	public async getExecutionStatementList(searchParam: SearchExecutionStatementParam) {
+		const { type, page, title, tagList }= searchParam;
+
+		const limit = 10;
+		const offset = (page - 1) * limit;
+
+		switch (type) {
+			case SearchType.Tag : {
+				const countList = await this.executionStatementRepository.countByTag(tagList);
+				const totalCount = countList.length;
+
+				if (totalCount) {
+					const executionStatementList = await this.executionStatementRepository.findByTag(tagList, limit, offset);
+					return { totalCount, executionStatementList };
+				} else {
+					return { totalCount, executionStatementList: null };
+				}
+			}
+			case SearchType.Title : {
+				const [executionStatementList, totalCount] = await this.executionStatementRepository.findByTitle(title, limit, offset);
+				return { totalCount, executionStatementList: totalCount ? executionStatementList : null };
+			}
+		}
 	}
 }
