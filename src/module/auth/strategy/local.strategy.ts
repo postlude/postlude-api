@@ -9,11 +9,14 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 		private authService: AuthService
 	) {
 		// usernameField 가 없으면 반드시 'username'으로 찾는다(strategy로 들어가지도 않음)
-		super({ usernameField: 'email' });
+		super({
+			usernameField: 'email',
+			passwordField: 'password'
+		});
 	}
 
 	async validate(email: string, password: string) {
-		console.log('LocalStrategy validate');
+		// console.log('LocalStrategy validate');
 		const user = await this.authService.validateUser(email, password);
 		if (!user) {
 			throw new UnauthorizedException();
