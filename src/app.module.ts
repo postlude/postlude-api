@@ -6,6 +6,7 @@ import { DevLink } from './database/entity/dev-link.entity';
 import { ExecutionStatementTag } from './database/entity/execution-statement-tag.entity';
 import { ExecutionStatement } from './database/entity/execution-statement.entity';
 import { Tag } from './database/entity/tag.entity';
+import { User } from './database/entity/user.entity';
 import { DevLinkModule } from './module/dev-link/dev-link.module';
 import { ExecutionStatementModule } from './module/execution-statement/execution-statement.module';
 
@@ -23,7 +24,8 @@ import { ExecutionStatementModule } from './module/execution-statement/execution
 				Tag,
 				DevLinkTag,
 				ExecutionStatement,
-				ExecutionStatementTag
+				ExecutionStatementTag,
+				User
 			],
 			logging: true
 			// synchronize: true
