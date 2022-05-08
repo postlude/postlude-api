@@ -1,26 +1,35 @@
-/* eslint-disable */
-import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from '../auth/auth.service';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { AuthUser } from 'src/auth/auth-user.model';
+import { Auth } from 'src/auth/decorator/auth.decorator';
+import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
+import { SignDto } from './user.dto';
+import { UserService } from './user.service';
 
 @Controller('/user')
 export class UserController {
 	constructor(
-		private readonly authService: AuthService
+		private readonly userService: UserService
 	) {}
 
-	@UseGuards(AuthGuard('local'))
-	// @UseGuards(LocalAuthGuard)
-	@Post('/login')
-	login(@Request() req) {
-		console.log('UserController /login');
-		// return req.user;
-		return this.authService.login(req.user);
+	@UseGuards(JwtAuthGuard)
+	@Get('/auth-test')
+	public authTest(
+		@Auth() user: AuthUser
+	) {
+		return user;
 	}
 
-	@UseGuards(AuthGuard('jwt'))
-  	@Get('/profile')
-  	getProfile(@Request() req) {
-    	return req.user;
-  	}
+	@Post('/')
+	public async signUp(
+		@Body() param: SignDto
+	) {
+		return await this.userService.signUp(param);
+	}
+
+	@Post('/sign-in')
+	public async signIn(
+		@Body() param: SignDto
+	) {
+		return await this.userService.signIn(param);
+	}
 }
