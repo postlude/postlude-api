@@ -11,7 +11,7 @@ import { UserService } from './user.service';
 		AuthModule,
 		JwtModule.register({
 			secret: 'local',
-			signOptions: { expiresIn: '60s' }
+			signOptions: { expiresIn: '1d' }
 		}),
 		TypeOrmModule.forFeature([
 			UserRepository
