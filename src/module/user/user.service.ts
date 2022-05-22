@@ -13,6 +13,10 @@ export class UserService {
 
 	private readonly SALT_OR_ROUNDS = 10;
 
+	/**
+	 * @description 유저 생성
+	 * @param param
+	 */
 	public async signUp(param: SignDto) {
 		const { email, password } = param;
 
@@ -31,6 +35,10 @@ export class UserService {
 		return identifiers[0].idx as number;
 	}
 
+	/**
+	 * @description 로그인
+	 * @param param
+	 */
 	public async signIn(param: SignDto) {
 		const { email, password: inputPassword } = param;
 
