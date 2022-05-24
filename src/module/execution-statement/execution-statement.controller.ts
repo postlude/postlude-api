@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
+import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 import { AddExecutionStatementDto, SearchExecutionStatementParam, SetExecutionStatementDto } from './execution-statement.dto';
 import { ExecutionStatementService } from './execution-statement.service';
 
