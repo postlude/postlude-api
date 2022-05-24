@@ -1,6 +1,8 @@
 import { Module, ValidationPipe } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MySqlConfig } from './config/config.model';
 import { DevLinkTag } from './database/entity/dev-link-tag.entity';
 import { DevLink } from './database/entity/dev-link.entity';
 import { ExecutionStatementTag } from './database/entity/execution-statement-tag.entity';
@@ -13,23 +15,31 @@ import { UserModule } from './module/user/user.module';
 
 @Module({
 	imports: [
-		TypeOrmModule.forRoot({
-			type: 'mysql',
-			host: 'localhost',
-			port: 3306,
-			username: 'root',
-			password: 'root',
-			database: 'postlude',
-			entities: [
-				DevLink,
-				Tag,
-				DevLinkTag,
-				ExecutionStatement,
-				ExecutionStatementTag,
-				User
-			],
-			logging: true
-			// synchronize: true
+		ConfigModule.forRoot({
+			envFilePath: ['src/config/local.env'],
+			isGlobal: true
+		}),
+		TypeOrmModule.forRootAsync({
+			inject: [ConfigService],
+			useFactory: (configService: ConfigService<MySqlConfig>) => ({
+				type: 'mysql',
+				host: configService.get('MYSQL_HOST', { infer: true }),
+				port: configService.get('MYSQL_PORT', { infer: true }),
+				username: configService.get('MYSQL_USERNAME', { infer: true }),
+				password: configService.get('MYSQL_PASSWORD', { infer: true }),
+				database: configService.get('MYSQL_DATABASE', { infer: true }),
+				// entities: [join(__dirname, '/**/*.entity.js')],
+				entities: [
+					DevLink,
+					Tag,
+					DevLinkTag,
+					ExecutionStatement,
+					ExecutionStatementTag,
+					User
+				],
+				logging: true
+				// synchronize: true,
+			})
 		}),
 		DevLinkModule,
 		ExecutionStatementModule,
