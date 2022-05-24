@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guard/jwt.guard';
+import { LoginRequired } from '../auth/guard/jwt.guard';
 import { AddDevLinkDto, SearchDevLinkParam, SetDevLinkDto } from './dev-link.dto';
 import { DevLinkService } from './dev-link.service';
 
@@ -24,7 +24,7 @@ export class DevLinkController {
 	}
 
 	@Delete('/:idx')
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(LoginRequired)
 	public removeDevLink(
 		@Param('idx', ParseIntPipe) devLinkIdx: number
 	) {
@@ -32,7 +32,7 @@ export class DevLinkController {
 	}
 
 	@Post('/')
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(LoginRequired)
 	public addDevLink(
 		@Body() devLinkDto: AddDevLinkDto
 	) {
@@ -40,7 +40,7 @@ export class DevLinkController {
 	}
 
 	@Put('/')
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(LoginRequired)
 	public setDevLink(
 		@Body() devLinkDto: SetDevLinkDto
 	) {

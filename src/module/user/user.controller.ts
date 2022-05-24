@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { LoginUser } from '../auth/auth.model';
 import { AuthUser } from '../auth/decorator/auth.decorator';
-import { JwtAuthGuard } from '../auth/guard/jwt.guard';
+import { LoginRequired } from '../auth/guard/jwt.guard';
 import { SignDto } from './user.dto';
 import { UserService } from './user.service';
 
@@ -11,7 +11,7 @@ export class UserController {
 		private readonly userService: UserService
 	) {}
 
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(LoginRequired)
 	@Get('/auth-test')
 	public authTest(
 		@AuthUser() user: LoginUser
