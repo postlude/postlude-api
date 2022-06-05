@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
+import { LoginRequired } from '../auth/guard/jwt.guard';
 import { AddExecutionStatementDto, SearchExecutionStatementParam, SetExecutionStatementDto } from './execution-statement.dto';
 import { ExecutionStatementService } from './execution-statement.service';
 
@@ -24,7 +24,7 @@ export class ExecutionStatementController {
 	}
 
 	@Delete('/:idx')
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(LoginRequired)
 	public removeExecutionStatement(
 		@Param('idx', ParseIntPipe) executionStatementIdx: number
 	) {
@@ -32,7 +32,7 @@ export class ExecutionStatementController {
 	}
 
 	@Post('/')
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(LoginRequired)
 	public addExecutionStatement(
 		@Body() executionStatementDto: AddExecutionStatementDto
 	) {
@@ -40,7 +40,7 @@ export class ExecutionStatementController {
 	}
 
 	@Put('/')
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(LoginRequired)
 	public setExecutionStatement(
 		@Body() executionStatementDto: SetExecutionStatementDto
 	) {
