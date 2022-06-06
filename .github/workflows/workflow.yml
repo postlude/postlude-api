@@ -1,4 +1,4 @@
-name: API Docker Build Test
+name: API Docker Build
 
 on:
   push:
@@ -9,7 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Source Code Checkout
-      uses: actions/checkout@develop
+      uses: actions/checkout@master
+      with:
+        ref: develop
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
     - name: Build and push
