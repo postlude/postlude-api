@@ -2,7 +2,7 @@
 .github/
 .gitignore
 
+express/
 Dockerfile
-
-jsconfig.json
 README.md
+.eslintrc.js
