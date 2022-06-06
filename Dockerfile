@@ -11,4 +11,4 @@ WORKDIR ${SERVER_HOME}
 RUN yarn \
 	&& yarn build
 
-CMD ["node", "./dist/main.js"]
+CMD ["yarn", "start:prod"]
