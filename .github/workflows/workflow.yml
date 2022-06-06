@@ -31,4 +31,4 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: public.ecr.aws/$ECR_REGISTRY/postlude/postlude-api:develop
+        tags: public.ecr.aws/l0r5x0q9/postlude/postlude-api:develop
