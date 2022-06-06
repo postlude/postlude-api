@@ -8,8 +8,7 @@ COPY . ${SERVER_HOME}
 
 WORKDIR ${SERVER_HOME}
 
-RUN npm i -g yarn \
-    && yarn \
+RUN yarn \
 	&& yarn build
 
 CMD ["node", "./dist/main.js"]
