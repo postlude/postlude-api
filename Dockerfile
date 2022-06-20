@@ -10,6 +10,8 @@ WORKDIR ${SERVER_HOME}
 
 RUN yarn \
 	&& yarn build \
-	&& rm -rf !(dist)
+	&& mv dist /tmp/ \
+	&& rm -rf ./* \
+	&& mv /tmp/dist .
 
 CMD ["yarn", "start:prod"]
