@@ -9,9 +9,6 @@ COPY . ${SERVER_HOME}
 WORKDIR ${SERVER_HOME}
 
 RUN yarn \
-	&& yarn build \
-	&& mv dist /tmp/ \
-	&& rm -rf ./* \
-	&& mv /tmp/dist .
+	&& yarn build
 
 CMD ["yarn", "start:prod"]
