@@ -20,7 +20,6 @@ async function bootstrap() {
 	await app.listen(port);
 
 	console.log('[POSTLUDE API]');
-	// console.log(`ENV : ${ENV}`);
 	console.log(`PORT : ${port}`);
 }
 

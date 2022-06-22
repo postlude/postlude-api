@@ -15,17 +15,20 @@ import { MySqlConfig } from 'src/config/config.model';
 	imports: [
 		TypeOrmModule.forRootAsync({
 			inject: [ConfigService],
-			useFactory: (configService: ConfigService<MySqlConfig>) => ({
-				type: 'mysql',
-				host: configService.get('MYSQL_HOST', { infer: true }),
-				port: configService.get('MYSQL_PORT', { infer: true }),
-				username: configService.get('MYSQL_USERNAME', { infer: true }),
-				password: configService.get('MYSQL_PASSWORD', { infer: true }),
-				database: configService.get('MYSQL_DATABASE', { infer: true }),
-				entities: [join(__dirname, '/**/*.entity.js')],
-				logging: true
-				// synchronize: false,
-			})
+			useFactory: (configService: ConfigService<MySqlConfig>) => {
+				console.log(configService.get('MYSQL_HOST', { infer: true }));
+				return {
+					type: 'mysql',
+					host: configService.get('MYSQL_HOST', { infer: true }),
+					port: configService.get('MYSQL_PORT', { infer: true }),
+					username: configService.get('MYSQL_USERNAME', { infer: true }),
+					password: configService.get('MYSQL_PASSWORD', { infer: true }),
+					database: configService.get('MYSQL_DATABASE', { infer: true }),
+					entities: [join(__dirname, '/**/*.entity.js')],
+					logging: true
+					// synchronize: false,
+				};
+			}
 		}),
 		TypeOrmModule.forFeature([
 			UserRepository,
