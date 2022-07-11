@@ -2,7 +2,7 @@ name: API Docker Build
 
 on:
   push:
-    branches: [develop]
+    branches: [master]
 
 jobs:
   postlude-api-build:
@@ -24,4 +24,4 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ghcr.io/${{ github.repository_owner }}/postlude-api:develop
+        tags: ghcr.io/${{ github.repository_owner }}/postlude-api:prod
