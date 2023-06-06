@@ -16,7 +16,7 @@ import { MySqlConfig } from 'src/config/config.model';
 		TypeOrmModule.forRootAsync({
 			inject: [ConfigService],
 			useFactory: (configService: ConfigService<MySqlConfig>) => {
-				console.log(configService.get('MYSQL_HOST', { infer: true }));
+				// console.log(configService.get('MYSQL_HOST', { infer: true }));
 				return {
 					type: 'mysql',
 					host: configService.get('MYSQL_HOST', { infer: true }),
