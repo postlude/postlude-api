@@ -1,7 +1,7 @@
 {
 	"name": "postlude-api",
 	"version": "1.0.0",
-	"main": "index.js",
+	"main": "main.ts",
 	"repository": "https://github.com/postlude/postlude-api.git",
 	"author": "postlude <seungdeokhan@naver.com>",
 	"license": "MIT",
