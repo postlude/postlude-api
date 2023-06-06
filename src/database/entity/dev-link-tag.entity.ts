@@ -5,9 +5,9 @@ export class DevLinkTag {
 	@PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
 	id: number;
 
-	@Column({ type: 'int', name: 'dev_link_idx', unsigned: true })
-	devLinkIdx: number;
+	@Column({ type: 'int', name: 'dev_link_id', unsigned: true })
+	devLinkId: number;
 
-	@Column({ type: 'int', name: 'tag_idx', unsigned: true })
-	tagIdx: number;
+	@Column({ type: 'int', name: 'tag_id', unsigned: true })
+	tagId: number;
 }

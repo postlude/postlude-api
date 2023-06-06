@@ -64,10 +64,10 @@ export class DevLinkService {
 
 	/**
 	 * @description 태그, 태그 연결 생성
-	 * @param devLinkIdx
+	 * @param devLinkId
 	 * @param tagList
 	 */
-	private async saveTag(devLinkIdx: number, tagList: string[]) {
+	private async saveTag(devLinkId: number, tagList: string[]) {
 		// bulk upsert tag
 		const tagEntityList = tagList.map((tag) => this.tagRepository.create({ tag }));
 		await this.tagRepository.upsert(tagEntityList, {
@@ -77,7 +77,7 @@ export class DevLinkService {
 		const upsertedTagList = await this.tagRepository.findByTag(tagList);
 
 		// bulk insert dev_link_tag
-		const devLinkTagList = upsertedTagList.map(({ id }) => ({ devLinkIdx, tagIdx: id }));
+		const devLinkTagList = upsertedTagList.map(({ id }) => ({ devLinkId, tagId: id }));
 		await this.devLinkTagRepository.insert(devLinkTagList);
 	}
 
@@ -104,17 +104,17 @@ export class DevLinkService {
 		const { idx, title, url, tagList } = devLinkDto;
 
 		await this.devLinkRepository.update(idx, { title, url });
-		await this.devLinkTagRepository.delete({ devLinkIdx: idx });
+		await this.devLinkTagRepository.delete({ devLinkId: idx });
 		await this.saveTag(idx, tagList);
 	}
 
 	/**
 	 * @description 개발 링크 삭제
-	 * @param devLinkIdx
+	 * @param devLinkId
 	 */
 	@Transactional()
-	public async removeDevLink(devLinkIdx: number) {
-		await this.devLinkTagRepository.delete({ devLinkIdx });
-		await this.devLinkRepository.delete(devLinkIdx);
+	public async removeDevLink(devLinkId: number) {
+		await this.devLinkTagRepository.delete({ devLinkId });
+		await this.devLinkRepository.delete(devLinkId);
 	}
 }
