@@ -2,8 +2,8 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ database: 'postlude', name: 'user' })
 export class User {
-	@PrimaryGeneratedColumn({ type: 'int', name: 'idx', unsigned: true })
-	idx: number;
+	@PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
+	id: number;
 
 	@Column({ type: 'varchar', name: 'email' })
 	email: string;

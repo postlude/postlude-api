@@ -10,7 +10,7 @@ export class TagRepository extends BaseRepository<Tag> {
 	 */
 	public findByTag(tagList: string[]) {
 		return this.find({
-			select: ['idx'],
+			select: ['id'],
 			where: {
 				tag: In(tagList)
 			}

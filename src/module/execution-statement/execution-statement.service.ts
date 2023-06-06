@@ -47,7 +47,7 @@ export class ExecutionStatementService {
 		const upsertedTagList = await this.tagRepository.findByTag(tagList);
 
 		// bulk insert execution_statement_tag
-		const executionStatementTagList = upsertedTagList.map(({ idx }) => ({ executionStatementIdx, tagIdx: idx }));
+		const executionStatementTagList = upsertedTagList.map(({ id }) => ({ executionStatementIdx, tagId: id }));
 		await this.executionStatementTagRepository.insert(executionStatementTagList);
 	}
 
@@ -74,7 +74,7 @@ export class ExecutionStatementService {
 		const { tagList, idx, ...executionStatement } = executionStatementDto;
 
 		await this.executionStatementRepository.update(idx, executionStatement);
-		await this.executionStatementTagRepository.delete({ executionStatementIdx: idx });
+		await this.executionStatementTagRepository.delete({ executionStatementId: idx });
 		await this.saveTag(idx, tagList);
 	}
 
@@ -84,7 +84,7 @@ export class ExecutionStatementService {
 	 */
 	@Transactional()
 	public async removeExecutionStatement(executionStatementIdx: number) {
-		await this.executionStatementTagRepository.delete({ executionStatementIdx });
+		await this.executionStatementTagRepository.delete({ executionStatementId: executionStatementIdx });
 		await this.executionStatementRepository.delete(executionStatementIdx);
 	}
 

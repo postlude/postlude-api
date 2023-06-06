@@ -77,7 +77,7 @@ export class DevLinkService {
 		const upsertedTagList = await this.tagRepository.findByTag(tagList);
 
 		// bulk insert dev_link_tag
-		const devLinkTagList = upsertedTagList.map(({ idx }) => ({ devLinkIdx, tagIdx: idx }));
+		const devLinkTagList = upsertedTagList.map(({ id }) => ({ devLinkIdx, tagIdx: id }));
 		await this.devLinkTagRepository.insert(devLinkTagList);
 	}
 

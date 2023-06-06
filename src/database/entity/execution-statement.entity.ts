@@ -4,7 +4,7 @@ import { Tag } from './tag.entity';
 @Entity({ database: 'postlude', name: 'execution_statement' })
 export class ExecutionStatement {
 	@PrimaryGeneratedColumn({ type: 'int', name: 'idx', unsigned: true })
-	idx: number;
+	id: number;
 
 	@Column({ type: 'varchar', name: 'title' })
 	title: string;
@@ -25,12 +25,12 @@ export class ExecutionStatement {
 	@JoinTable({
 		name: 'execution_statement_tag',
 		joinColumn: {
-			name: 'execution_statement_idx',
-			referencedColumnName: 'idx'
+			name: 'execution_statement_id',
+			referencedColumnName: 'id'
 		},
 		inverseJoinColumn: {
-			name: 'tag_idx',
-			referencedColumnName: 'idx'
+			name: 'tag_id',
+			referencedColumnName: 'id'
 		}
 	})
 	tagList: Tag[];

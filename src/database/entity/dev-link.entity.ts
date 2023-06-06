@@ -3,8 +3,8 @@ import { Tag } from './tag.entity';
 
 @Entity({ database: 'postlude', name: 'dev_link' })
 export class DevLink {
-	@PrimaryGeneratedColumn({ type: 'int', name: 'idx', unsigned: true })
-	idx: number;
+	@PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
+	id: number;
 
 	@Column({ type: 'varchar', name: 'title' })
 	title: string;
@@ -22,12 +22,12 @@ export class DevLink {
 	@JoinTable({
 		name: 'dev_link_tag',
 		joinColumn: {
-			name: 'dev_link_idx',
-			referencedColumnName: 'idx'
+			name: 'dev_link_id',
+			referencedColumnName: 'id'
 		},
 		inverseJoinColumn: {
-			name: 'tag_idx',
-			referencedColumnName: 'idx'
+			name: 'tag_id',
+			referencedColumnName: 'id'
 		}
 	})
 	tagList: Tag[];

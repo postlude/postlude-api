@@ -10,9 +10,9 @@ export class ExecutionStatementRepository extends BaseRepository<ExecutionStatem
 	 */
 	public findOneByIdx(executionStatementIdx: number) {
 		return this.createQueryBuilder('e')
-			.select(['e.idx', 'e.title', 'e.statement', 'e.description', 't.tag'])
+			.select(['e.id', 'e.title', 'e.statement', 'e.description', 't.tag'])
 			.innerJoin('e.tagList', 't')
-			.where('e.idx = :executionStatementIdx', { executionStatementIdx })
+			.where('e.id = :executionStatementIdx', { executionStatementIdx })
 			.getOne();
 	}
 
@@ -22,11 +22,11 @@ export class ExecutionStatementRepository extends BaseRepository<ExecutionStatem
 	 */
 	public async countByTag(tagList: string[]) {
 		return await this.createQueryBuilder('e')
-			.select('e.idx')
+			.select('e.id')
 			.innerJoin('e.tagList', 't')
 			.where('t.tag IN (:tagList)', { tagList })
-			.groupBy('e.idx')
-			.having('COUNT(e.idx) = :tagCnt', { tagCnt: tagList.length })
+			.groupBy('e.id')
+			.having('COUNT(e.id) = :tagCnt', { tagCnt: tagList.length })
 			.getMany();
 	}
 
@@ -38,12 +38,12 @@ export class ExecutionStatementRepository extends BaseRepository<ExecutionStatem
 	 */
 	public findByTag(tagList: string[], limit: number, offset: number) {
 		return this.createQueryBuilder('e')
-			.select(['e.idx', 'e.title', 'e.statement'])
+			.select(['e.id', 'e.title', 'e.statement'])
 			.innerJoin('e.tagList', 't')
 			.where('t.tag IN (:tagList)', { tagList })
-			.groupBy('e.idx')
-			.having('COUNT(e.idx) = :tagCnt', { tagCnt: tagList.length })
-			.orderBy('e.idx', 'ASC')
+			.groupBy('e.id')
+			.having('COUNT(e.id) = :tagCnt', { tagCnt: tagList.length })
+			.orderBy('e.id', 'ASC')
 			.limit(limit)
 			.offset(offset)
 			.getMany();
@@ -57,7 +57,7 @@ export class ExecutionStatementRepository extends BaseRepository<ExecutionStatem
 	 */
 	public async findByTitle(title: string, take: number, skip: number) {
 		return await this.findAndCount({
-			select: ['idx', 'title', 'statement'],
+			select: ['id', 'title', 'statement'],
 			where: { title: Like(`%${title}%`) },
 			take,
 			skip

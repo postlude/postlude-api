@@ -45,11 +45,11 @@ export class UserService {
 		const user = await this.userRepository.findOne({ email });
 
 		if (user) {
-			const { idx, email, password } = user;
+			const { id, email, password } = user;
 
 			const isSame = await bcrypt.compare(inputPassword, password);
 			if (isSame) {
-				return this.jwtService.sign({ idx, email });
+				return this.jwtService.sign({ id, email });
 			}
 		}
 

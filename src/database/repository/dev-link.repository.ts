@@ -57,7 +57,7 @@ export class DevLinkRepository extends BaseRepository<DevLink> {
 	 */
 	public async findByTitle(title: string, take: number, skip: number) {
 		return await this.findAndCount({
-			select: ['idx', 'title', 'url'],
+			select: ['id', 'title', 'url'],
 			where: { title: Like(`%${title}%`) },
 			take,
 			skip
