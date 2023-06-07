@@ -30,5 +30,5 @@ export class DevLink {
 			referencedColumnName: 'id'
 		}
 	})
-	tagList: Tag[];
+	tags: Tag[];
 }
