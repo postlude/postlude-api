@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { plainToInstance } from 'class-transformer';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { DevLinkTagRepository } from '../../database/repository/dev-link-tag.repository';
 import { DevLinkRepository } from '../../database/repository/dev-link.repository';
 import { TagRepository } from '../../database/repository/tag.repository';
-import { AddDevLinkDto, DevLinkDto, SearchDevLinkQuery, SetDevLinkDto } from './dev-link.dto';
-import { plainToInstance } from 'class-transformer';
+import { DevLinkDto, SearchDevLinkQuery, SetDevLinkDto } from './dev-link.dto';
 
 @Injectable()
 export class DevLinkService {
@@ -80,9 +80,16 @@ export class DevLinkService {
 		const { title, url, tags } = devLinkDto;
 
 		const { identifiers } = await this.devLinkRepository.insert({ title, url });
-		const devLinkId = identifiers[0].idx as number;
+		const devLinkId = identifiers[0].id as number;
 
-		await this.saveTag(devLinkId, tags);
+		// 공백 제거 후 중복 제거
+		const filtered = Array.from(new Set(tags.map((t) => t.trim())));
+
+		// bulk insert
+		const devLinkTags = filtered.map((tag) => this.devLinkTagRepository.create({ devLinkId, tag }));
+		await this.devLinkTagRepository.insert(devLinkTags);
+
+		return devLinkId;
 	}
 
 	/**

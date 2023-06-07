@@ -22,11 +22,10 @@ export class SearchDevLinkQuery {
 }
 
 export class DevLinkDto {
-	@IsOptional()
 	@IsInt()
 	@Min(1)
 	@Expose()
-	public id?: number;
+	public id: number;
 
 	@IsString()
 	@IsNotEmpty()
