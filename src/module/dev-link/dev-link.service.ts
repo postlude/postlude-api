@@ -106,5 +106,7 @@ export class DevLinkService {
 	public async removeDevLink(devLinkId: number) {
 		await this.devLinkTagRepository.delete({ devLinkId });
 		await this.devLinkRepository.delete(devLinkId);
+
+		return devLinkId;
 	}
 }

@@ -16,16 +16,8 @@ export class DevLinkController {
 		return this.devLinkService.search(query);
 	}
 
-	@Delete('/:idx')
-	@UseGuards(LoginRequired)
-	public removeDevLink(
-		@Param('idx', ParseIntPipe) devLinkIdx: number
-	) {
-		return this.devLinkService.removeDevLink(devLinkIdx);
-	}
-
 	@Post('/')
-	@UseGuards(LoginRequired)
+	// @UseGuards(LoginRequired)
 	public addDevLink(
 		@Body() devLinkDto: AddDevLinkDto
 	) {
@@ -33,10 +25,18 @@ export class DevLinkController {
 	}
 
 	@Put('/')
-	@UseGuards(LoginRequired)
+	// @UseGuards(LoginRequired)
 	public setDevLink(
 		@Body() devLinkDto: SetDevLinkDto
 	) {
 		this.devLinkService.setDevLink(devLinkDto);
+	}
+
+	@Delete('/:id')
+	// @UseGuards(LoginRequired)
+	public removeDevLink(
+		@Param('id', ParseIntPipe) devLinkId: number
+	) {
+		return this.devLinkService.removeDevLink(devLinkId);
 	}
 }
