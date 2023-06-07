@@ -15,25 +15,6 @@ export class DevLinkService {
 	) {}
 
 	/**
-	 * @description 개발 링크 1개 조회
-	 * @param devLinkIdx
-	 */
-	public async getDevLink(devLinkIdx: number) {
-		const devLinkInfo = await this.devLinkRepository.findOneByIdx(devLinkIdx);
-
-		if (devLinkInfo) {
-			const { tags: tagList, ...devLink } = devLinkInfo;
-
-			return {
-				devLink,
-				tagList: tagList.map((t) => t.name)
-			};
-		} else {
-			return null;
-		}
-	}
-
-	/**
 	 * @description 개발 링크 검색(일단 단일 태그 검색만)
 	 * @param searchParam
 	 */

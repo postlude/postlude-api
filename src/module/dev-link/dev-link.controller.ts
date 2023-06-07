@@ -16,13 +16,6 @@ export class DevLinkController {
 		return this.devLinkService.search(query);
 	}
 
-	@Get('/:idx')
-	public getDevLink(
-		@Param('idx', ParseIntPipe) devLinkIdx: number
-	) {
-		return this.devLinkService.getDevLink(devLinkIdx);
-	}
-
 	@Delete('/:idx')
 	@UseGuards(LoginRequired)
 	public removeDevLink(
