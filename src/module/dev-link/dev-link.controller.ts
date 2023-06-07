@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { LoginRequired } from '../auth/guard/jwt.guard';
-import { AddDevLinkDto, SearchDevLinkQuery, SetDevLinkDto } from './dev-link.dto';
+import { AddDevLinkDto, DevLinkDto, SearchDevLinkQuery, SetDevLinkDto } from './dev-link.dto';
 import { DevLinkService } from './dev-link.service';
 
 @Controller('/dev-links')
@@ -10,33 +10,33 @@ export class DevLinkController {
 	) {}
 
 	@Get('/')
-	public searchDevLink(
+	public async searchDevLink(
 		@Query() query: SearchDevLinkQuery
 	) {
-		return this.devLinkService.search(query);
+		return await this.devLinkService.search(query);
 	}
 
 	@Post('/')
 	// @UseGuards(LoginRequired)
-	public addDevLink(
-		@Body() devLinkDto: AddDevLinkDto
+	public async addDevLink(
+		@Body() devLinkDto: Omit<DevLinkDto, 'id'>
 	) {
-		this.devLinkService.addDevLink(devLinkDto);
+		await this.devLinkService.addDevLink(devLinkDto);
 	}
 
 	@Put('/')
 	// @UseGuards(LoginRequired)
-	public setDevLink(
+	public async setDevLink(
 		@Body() devLinkDto: SetDevLinkDto
 	) {
-		this.devLinkService.setDevLink(devLinkDto);
+		await this.devLinkService.setDevLink(devLinkDto);
 	}
 
 	@Delete('/:id')
-	// @UseGuards(LoginRequired)
-	public removeDevLink(
+	@UseGuards(LoginRequired)
+	public async removeDevLink(
 		@Param('id', ParseIntPipe) devLinkId: number
 	) {
-		return this.devLinkService.removeDevLink(devLinkId);
+		return await this.devLinkService.removeDevLink(devLinkId);
 	}
 }

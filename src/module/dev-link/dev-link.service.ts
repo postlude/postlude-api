@@ -36,7 +36,7 @@ export class DevLinkService {
 
 			const devLinks = devLinkList.map((devLink) => {
 				const dl = tagList.find((dl) => dl.id === devLink.id);
-				const tags = dl.tags.map(({ name }) => name);
+				const tags = dl.devLinkTags.map(({ tag }) => tag);
 
 				return plainToInstance(DevLinkDto, {
 					...devLink,
@@ -55,16 +55,16 @@ export class DevLinkService {
 	/**
 	 * @description 태그, 태그 연결 생성
 	 * @param devLinkId
-	 * @param tagList
+	 * @param tagNames
 	 */
-	private async saveTag(devLinkId: number, tagList: string[]) {
+	private async saveTag(devLinkId: number, tagNames: string[]) {
 		// bulk upsert tag
-		const tagEntityList = tagList.map((tag) => this.tagRepository.create({ name: tag }));
+		const tagEntityList = tagNames.map((name) => this.tagRepository.create({ name }));
 		await this.tagRepository.upsert(tagEntityList, {
-			conflictPaths: ['tag'],
+			conflictPaths: ['name'],
 			skipUpdateIfNoValuesChanged: true
 		});
-		const upsertedTagList = await this.tagRepository.findByTag(tagList);
+		const upsertedTagList = await this.tagRepository.findByNames(tagNames);
 
 		// bulk insert dev_link_tag
 		const devLinkTagList = upsertedTagList.map(({ id }) => ({ devLinkId, tagId: id }));
@@ -76,13 +76,13 @@ export class DevLinkService {
 	 * @param devLinkDto
 	 */
 	@Transactional()
-	public async addDevLink(devLinkDto: AddDevLinkDto) {
-		const { title, url, tagList } = devLinkDto;
+	public async addDevLink(devLinkDto: Omit<DevLinkDto, 'id'>) {
+		const { title, url, tags } = devLinkDto;
 
 		const { identifiers } = await this.devLinkRepository.insert({ title, url });
-		const devLinkIdx = identifiers[0].idx as number;
+		const devLinkId = identifiers[0].idx as number;
 
-		await this.saveTag(devLinkIdx, tagList);
+		await this.saveTag(devLinkId, tags);
 	}
 
 	/**

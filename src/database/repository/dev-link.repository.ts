@@ -6,12 +6,12 @@ import { DevLink } from '../entity/dev-link.entity';
 export class DevLinkRepository extends BaseRepository<DevLink> {
 	/**
 	 * @description 단일 태그 검색시 전체 카운트
-	 * @param tagName
+	 * @param tag
 	 */
-	public async countByTag(tagName: string) {
+	public async countByTag(tag: string) {
 		return await this.createQueryBuilder('dl')
-			.innerJoin('dl.tags', 't')
-			.where('t.name = :tagName', { tagName })
+			.innerJoin('dl.devLinkTags', 'dlt')
+			.where('dlt.tag = :tag', { tag })
 			.getCount();
 	}
 
@@ -21,12 +21,12 @@ export class DevLinkRepository extends BaseRepository<DevLink> {
 	 * @param limit
 	 * @param offset
 	 */
-	public async findByTag(tagName: string, limit: number, offset: number) {
+	public async findByTag(tag: string, limit: number, offset: number) {
 		return await this.createQueryBuilder('dl')
 			.select(['dl.id', 'dl.title', 'dl.url'])
-			.innerJoin('dl.tags', 't')
-			.where('t.name = :tagName', { tagName })
-			.orderBy('dl.id', 'ASC')
+			.innerJoin('dl.devLinkTags', 'dlt')
+			.where('dlt.tag = :tag', { tag: tag })
+			.orderBy('dl.id', 'DESC')
 			.limit(limit)
 			.offset(offset)
 			.getMany();
@@ -34,8 +34,8 @@ export class DevLinkRepository extends BaseRepository<DevLink> {
 
 	public async findTagsById(devLinkId: number) {
 		return await this.createQueryBuilder('dl')
-			.select(['dl.id', 't.name'])
-			.innerJoin('dl.tags', 't')
+			.select(['dl.id', 'dlt.tag'])
+			.innerJoin('dl.devLinkTags', 'dlt')
 			.where('dl.id = :devLinkId', { devLinkId })
 			.getOne();
 	}
