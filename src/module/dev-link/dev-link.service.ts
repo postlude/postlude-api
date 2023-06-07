@@ -3,8 +3,8 @@ import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { DevLinkTagRepository } from '../../database/repository/dev-link-tag.repository';
 import { DevLinkRepository } from '../../database/repository/dev-link.repository';
 import { TagRepository } from '../../database/repository/tag.repository';
-import { AddDevLinkDto, SearchDevLinkParam, SetDevLinkDto } from './dev-link.dto';
-import { SearchType } from './dev-link.model';
+import { AddDevLinkDto, DevLinkDto, SearchDevLinkQuery, SetDevLinkDto } from './dev-link.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class DevLinkService {
@@ -22,11 +22,11 @@ export class DevLinkService {
 		const devLinkInfo = await this.devLinkRepository.findOneByIdx(devLinkIdx);
 
 		if (devLinkInfo) {
-			const { tagList, ...devLink } = devLinkInfo;
+			const { tags: tagList, ...devLink } = devLinkInfo;
 
 			return {
 				devLink,
-				tagList: tagList.map((t) => t.tag)
+				tagList: tagList.map((t) => t.name)
 			};
 		} else {
 			return null;
@@ -34,31 +34,40 @@ export class DevLinkService {
 	}
 
 	/**
-	 * @description 개발 링크 검색
+	 * @description 개발 링크 검색(일단 단일 태그 검색만)
 	 * @param searchParam
 	 */
-	public async getDevLinkList(searchParam: SearchDevLinkParam) {
-		const { type, page, title, tagList }= searchParam;
+	public async search(searchParam: SearchDevLinkQuery) {
+		const { page, tagName }= searchParam;
 
 		const limit = 10;
 		const offset = (page - 1) * limit;
 
-		switch (type) {
-			case SearchType.Tag : {
-				const countList = await this.devLinkRepository.countByTag(tagList);
-				const totalCount = countList.length;
+		const totalCount = await this.devLinkRepository.countByTag(tagName);
 
-				if (totalCount) {
-					const devLinkList = await this.devLinkRepository.findByTag(tagList, limit, offset);
-					return { totalCount, devLinkList };
-				} else {
-					return { totalCount, devLinkList: null };
-				}
-			}
-			case SearchType.Title : {
-				const [devLinkList, totalCount] = await this.devLinkRepository.findByTitle(title, limit, offset);
-				return { totalCount, devLinkList: totalCount ? devLinkList : null };
-			}
+		if (totalCount) {
+			// 단일 태그 검색
+			const devLinkList = await this.devLinkRepository.findByTag(tagName, limit, offset);
+
+			// 해당 개발 링크의 모든 태그 조회
+			const promises = devLinkList.map(({ id }) => this.devLinkRepository.findTagsById(id));
+			const tagList = await Promise.all(promises);
+
+			const devLinks = devLinkList.map((devLink) => {
+				const dl = tagList.find((dl) => dl.id === devLink.id);
+				const tags = dl.tags.map(({ name }) => name);
+
+				return plainToInstance(DevLinkDto, {
+					...devLink,
+					tags
+				}, {
+					excludeExtraneousValues: true
+				});
+			});
+
+			return { totalCount, devLinks };
+		} else {
+			return { totalCount, devLinks: null };
 		}
 	}
 
@@ -69,7 +78,7 @@ export class DevLinkService {
 	 */
 	private async saveTag(devLinkId: number, tagList: string[]) {
 		// bulk upsert tag
-		const tagEntityList = tagList.map((tag) => this.tagRepository.create({ tag }));
+		const tagEntityList = tagList.map((tag) => this.tagRepository.create({ name: tag }));
 		await this.tagRepository.upsert(tagEntityList, {
 			conflictPaths: ['tag'],
 			skipUpdateIfNoValuesChanged: true

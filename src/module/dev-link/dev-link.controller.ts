@@ -1,19 +1,19 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { LoginRequired } from '../auth/guard/jwt.guard';
-import { AddDevLinkDto, SearchDevLinkParam, SetDevLinkDto } from './dev-link.dto';
+import { AddDevLinkDto, SearchDevLinkQuery, SetDevLinkDto } from './dev-link.dto';
 import { DevLinkService } from './dev-link.service';
 
-@Controller('/dev-link')
+@Controller('/dev-links')
 export class DevLinkController {
 	constructor(
 		private readonly devLinkService: DevLinkService
 	) {}
 
-	@Get('/list')
+	@Get('/')
 	public searchDevLink(
-		@Query() searchDevLinkParam: SearchDevLinkParam
+		@Query() query: SearchDevLinkQuery
 	) {
-		return this.devLinkService.getDevLinkList(searchDevLinkParam);
+		return this.devLinkService.search(query);
 	}
 
 	@Get('/:idx')

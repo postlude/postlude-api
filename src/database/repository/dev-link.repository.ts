@@ -17,36 +17,39 @@ export class DevLinkRepository extends BaseRepository<DevLink> {
 	}
 
 	/**
-	 * @description 태그 검색시 전체 카운트
-	 * @param tagList
+	 * @description 단일 태그 검색시 전체 카운트
+	 * @param tagName
 	 */
-	public async countByTag(tagList: string[]) {
-		return await this.createQueryBuilder('l')
-			.select('l.idx')
-			.innerJoin('l.tagList', 't')
-			.where('t.tag IN (:tagList)', { tagList })
-			.groupBy('l.idx')
-			.having('COUNT(l.idx) = :tagCnt', { tagCnt: tagList.length })
-			.getMany();
+	public async countByTag(tagName: string) {
+		return await this.createQueryBuilder('dl')
+			.innerJoin('dl.tags', 't')
+			.where('t.name = :tagName', { tagName })
+			.getCount();
 	}
 
 	/**
-	 * @description 태그 검색 조회
+	 * @description 단일 태그 검색 조회
 	 * @param tagList
 	 * @param limit
 	 * @param offset
 	 */
-	public findByTag(tagList: string[], limit: number, offset: number) {
-		return this.createQueryBuilder('l')
-			.select(['l.idx', 'l.title', 'l.url'])
-			.innerJoin('l.tagList', 't')
-			.where('t.tag IN (:tagList)', { tagList })
-			.groupBy('l.idx')
-			.having('COUNT(l.idx) = :tagCnt', { tagCnt: tagList.length })
-			.orderBy('l.idx', 'ASC')
+	public async findByTag(tagName: string, limit: number, offset: number) {
+		return await this.createQueryBuilder('dl')
+			.select(['dl.id', 'dl.title', 'dl.url'])
+			.innerJoin('dl.tags', 't')
+			.where('t.name = :tagName', { tagName })
+			.orderBy('dl.id', 'ASC')
 			.limit(limit)
 			.offset(offset)
 			.getMany();
+	}
+
+	public async findTagsById(devLinkId: number) {
+		return await this.createQueryBuilder('dl')
+			.select(['dl.id', 't.name'])
+			.innerJoin('dl.tags', 't')
+			.where('dl.id = :devLinkId', { devLinkId })
+			.getOne();
 	}
 
 	/**

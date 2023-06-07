@@ -1,25 +1,47 @@
-import { Transform, Type } from 'class-transformer';
-import { IsArray, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl, Min, MinLength } from 'class-validator';
-import { SearchType } from './dev-link.model';
+import { Expose, Type } from 'class-transformer';
+import { IsArray, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl, Min } from 'class-validator';
 
-export class SearchDevLinkParam {
-	@Type(() => Number)
-	@IsEnum(SearchType)
-	public type: SearchType;
-
+export class SearchDevLinkQuery {
 	@Type(() => Number)
 	@IsInt()
 	@Min(1)
 	public page: number;
 
-	@IsOptional()
-	@MinLength(2)
-	public title?: string;
+	@IsString()
+	@IsNotEmpty()
+	public tagName: string;
 
+	// @IsOptional()
+	// @MinLength(2)
+	// public title?: string;
+
+	// @IsOptional()
+	// @Transform(({ value }) => (value as string).split(','))
+	// @IsArray()
+	// public tagList?: string[];
+}
+
+export class DevLinkDto {
 	@IsOptional()
-	@Transform(({ value }) => (value as string).split(','))
+	@IsInt()
+	@Min(1)
+	@Expose()
+	public id?: number;
+
+	@IsString()
+	@IsNotEmpty()
+	@Expose()
+	public title: string;
+
+	@IsUrl()
+	@IsNotEmpty()
+	@Expose()
+	public url: string;
+
 	@IsArray()
-	public tagList?: string[];
+	@IsString({ each: true })
+	@Expose()
+	public tags: string[];
 }
 
 export class AddDevLinkDto {
