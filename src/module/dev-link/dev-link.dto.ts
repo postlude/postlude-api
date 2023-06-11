@@ -1,5 +1,5 @@
 import { Expose, Type } from 'class-transformer';
-import { IsArray, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl, Min } from 'class-validator';
+import { IsArray, IsInt, IsNotEmpty, IsString, IsUrl, Min } from 'class-validator';
 
 export class SearchDevLinkQuery {
 	@Type(() => Number)
@@ -22,11 +22,6 @@ export class SearchDevLinkQuery {
 }
 
 export class DevLinkDto {
-	@IsInt()
-	@Min(1)
-	@Expose()
-	public id: number;
-
 	@IsString()
 	@IsNotEmpty()
 	@Expose()
@@ -43,22 +38,9 @@ export class DevLinkDto {
 	public tags: string[];
 }
 
-export class AddDevLinkDto {
-	@IsString()
-	@IsNotEmpty()
-	public title: string;
-
-	@IsUrl()
-	@IsNotEmpty()
-	public url: string;
-
-	@IsOptional()
-	@IsString({ each: true })
-	public tagList: string[];
-}
-
-export class SetDevLinkDto extends AddDevLinkDto {
+export class DevLinkInfo extends DevLinkDto {
 	@IsInt()
 	@Min(1)
-	public idx: number;
+	@Expose()
+	public id: number;
 }

@@ -4,7 +4,7 @@ import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { DevLinkTagRepository } from '../../database/repository/dev-link-tag.repository';
 import { DevLinkRepository } from '../../database/repository/dev-link.repository';
 import { TagRepository } from '../../database/repository/tag.repository';
-import { DevLinkDto, SearchDevLinkQuery, SetDevLinkDto } from './dev-link.dto';
+import { DevLinkDto, DevLinkInfo, SearchDevLinkQuery } from './dev-link.dto';
 
 @Injectable()
 export class DevLinkService {
@@ -38,7 +38,7 @@ export class DevLinkService {
 				const dl = tagList.find((dl) => dl.id === devLink.id);
 				const tags = dl.devLinkTags.map(({ tag }) => tag);
 
-				return plainToInstance(DevLinkDto, {
+				return plainToInstance(DevLinkInfo, {
 					...devLink,
 					tags
 				}, {
@@ -53,22 +53,17 @@ export class DevLinkService {
 	}
 
 	/**
-	 * @description 태그, 태그 연결 생성
+	 * @description 태그 bulk insert
 	 * @param devLinkId
-	 * @param tagNames
+	 * @param tags
 	 */
-	private async saveTag(devLinkId: number, tagNames: string[]) {
-		// bulk upsert tag
-		const tagEntityList = tagNames.map((name) => this.tagRepository.create({ name }));
-		await this.tagRepository.upsert(tagEntityList, {
-			conflictPaths: ['name'],
-			skipUpdateIfNoValuesChanged: true
-		});
-		const upsertedTagList = await this.tagRepository.findByNames(tagNames);
+	private async saveTags(devLinkId: number, tags: string[]) {
+		// 공백 제거 후 중복 제거
+		const filtered = Array.from(new Set(tags.map((t) => t.trim())));
 
-		// bulk insert dev_link_tag
-		const devLinkTagList = upsertedTagList.map(({ id }) => ({ devLinkId, tagId: id }));
-		await this.devLinkTagRepository.insert(devLinkTagList);
+		// bulk insert
+		const devLinkTags = filtered.map((tag) => this.devLinkTagRepository.create({ devLinkId, tag }));
+		await this.devLinkTagRepository.insert(devLinkTags);
 	}
 
 	/**
@@ -82,12 +77,7 @@ export class DevLinkService {
 		const { identifiers } = await this.devLinkRepository.insert({ title, url });
 		const devLinkId = identifiers[0].id as number;
 
-		// 공백 제거 후 중복 제거
-		const filtered = Array.from(new Set(tags.map((t) => t.trim())));
-
-		// bulk insert
-		const devLinkTags = filtered.map((tag) => this.devLinkTagRepository.create({ devLinkId, tag }));
-		await this.devLinkTagRepository.insert(devLinkTags);
+		await this.saveTags(devLinkId, tags);
 
 		return devLinkId;
 	}
@@ -97,12 +87,12 @@ export class DevLinkService {
 	 * @param devLinkDto
 	 */
 	@Transactional()
-	public async setDevLink(devLinkDto: SetDevLinkDto) {
-		const { idx, title, url, tagList } = devLinkDto;
+	public async setDevLink(devLinkId: number, devLinkInfo: DevLinkDto) {
+		const { title, url, tags } = devLinkInfo;
 
-		await this.devLinkRepository.update(idx, { title, url });
-		await this.devLinkTagRepository.delete({ devLinkId: idx });
-		await this.saveTag(idx, tagList);
+		await this.devLinkRepository.update(devLinkId, { title, url });
+		await this.devLinkTagRepository.delete({ devLinkId });
+		await this.saveTags(devLinkId, tags);
 	}
 
 	/**

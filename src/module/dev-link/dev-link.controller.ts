@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { LoginRequired } from '../auth/guard/jwt.guard';
-import { DevLinkDto, SearchDevLinkQuery, SetDevLinkDto } from './dev-link.dto';
+import { DevLinkDto, SearchDevLinkQuery } from './dev-link.dto';
 import { DevLinkService } from './dev-link.service';
 
 @Controller('/dev-links')
@@ -19,17 +19,18 @@ export class DevLinkController {
 	@Post('/')
 	@UseGuards(LoginRequired)
 	public async addDevLink(
-		@Body() devLinkDto: Omit<DevLinkDto, 'id'>
+		@Body() devLinkDto: DevLinkDto
 	) {
 		return await this.devLinkService.addDevLink(devLinkDto);
 	}
 
-	@Put('/')
-	// @UseGuards(LoginRequired)
+	@Put('/:id')
+	@UseGuards(LoginRequired)
 	public async setDevLink(
-		@Body() devLinkDto: SetDevLinkDto
+		@Param('id', ParseIntPipe) devLinkId: number,
+		@Body() devLinkDto: DevLinkDto
 	) {
-		await this.devLinkService.setDevLink(devLinkDto);
+		await this.devLinkService.setDevLink(devLinkId, devLinkDto);
 	}
 
 	@Delete('/:id')
