@@ -3,15 +3,13 @@ import { plainToInstance } from 'class-transformer';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { DevLinkTagRepository } from '../../database/repository/dev-link-tag.repository';
 import { DevLinkRepository } from '../../database/repository/dev-link.repository';
-import { TagRepository } from '../../database/repository/tag.repository';
 import { DevLinkDto, DevLinkInfo, SearchDevLinkQuery } from './dev-link.dto';
 
 @Injectable()
 export class DevLinkService {
 	constructor(
 		private readonly devLinkRepository: DevLinkRepository,
-		private readonly devLinkTagRepository: DevLinkTagRepository,
-		private readonly tagRepository: TagRepository
+		private readonly devLinkTagRepository: DevLinkTagRepository
 	) {}
 
 	/**

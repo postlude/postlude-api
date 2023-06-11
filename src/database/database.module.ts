@@ -2,13 +2,10 @@ import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import { DevLinkRepository } from './repository/dev-link.repository';
-import { DevLinkTagRepository } from './repository/dev-link-tag.repository';
-import { UserRepository } from './repository/user.repository';
-import { ExecutionStatementRepository } from './repository/execution-statement.repository';
-import { ExecutionStatementTagRepository } from './repository/execution-statement-tag.repository';
-import { TagRepository } from './repository/tag.repository';
 import { MySqlConfig } from 'src/config/config.model';
+import { DevLinkTagRepository } from './repository/dev-link-tag.repository';
+import { DevLinkRepository } from './repository/dev-link.repository';
+import { UserRepository } from './repository/user.repository';
 
 @Global()
 @Module({
@@ -33,10 +30,7 @@ import { MySqlConfig } from 'src/config/config.model';
 		TypeOrmModule.forFeature([
 			UserRepository,
 			DevLinkRepository,
-			DevLinkTagRepository,
-			ExecutionStatementRepository,
-			ExecutionStatementTagRepository,
-			TagRepository
+			DevLinkTagRepository
 		])
 	],
 	exports: [TypeOrmModule]
