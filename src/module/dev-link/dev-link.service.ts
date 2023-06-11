@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { DevLinkTagRepository } from '../../database/repository/dev-link-tag.repository';
@@ -109,10 +109,13 @@ export class DevLinkService {
 	 * @description 개발 링크 삭제
 	 * @param devLinkId
 	 */
-	@Transactional()
 	public async removeDevLink(devLinkId: number) {
-		await this.devLinkTagRepository.delete({ devLinkId });
-		await this.devLinkRepository.delete(devLinkId);
+		// dev_link_tag는 onDelete: 'CASCADE'로 삭제됨
+		const result = await this.devLinkRepository.delete(devLinkId);
+
+		if (!result.affected) {
+			throw new BadRequestException('not existed data');
+		}
 
 		return devLinkId;
 	}

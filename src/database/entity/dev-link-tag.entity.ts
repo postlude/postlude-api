@@ -15,7 +15,7 @@ export class DevLinkTag {
 	@Column({ type: 'datetime', name: 'created_at' })
 	createdAt: Date;
 
-	@ManyToOne(() => DevLink, (devLink) => devLink.devLinkTags)
+	@ManyToOne(() => DevLink, (devLink) => devLink.devLinkTags, { onDelete: 'CASCADE' })
 	@JoinColumn({ name: 'dev_link_id' })
 	devLink: DevLink;
 }
