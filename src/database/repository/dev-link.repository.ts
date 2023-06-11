@@ -1,4 +1,4 @@
-import { EntityRepository, Like } from 'typeorm';
+import { EntityRepository } from 'typeorm';
 import { BaseRepository } from 'typeorm-transactional-cls-hooked';
 import { DevLink } from '../entity/dev-link.entity';
 
@@ -38,20 +38,5 @@ export class DevLinkRepository extends BaseRepository<DevLink> {
 			.innerJoin('dl.devLinkTags', 'dlt')
 			.where('dl.id = :devLinkId', { devLinkId })
 			.getOne();
-	}
-
-	/**
-	 * @description 제목 검색 조회
-	 * @param title
-	 * @param take
-	 * @param skip
-	 */
-	public async findByTitle(title: string, take: number, skip: number) {
-		return await this.findAndCount({
-			select: ['id', 'title', 'url'],
-			where: { title: Like(`%${title}%`) },
-			take,
-			skip
-		});
 	}
 }
