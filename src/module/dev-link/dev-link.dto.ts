@@ -1,5 +1,5 @@
 import { Expose, Type } from 'class-transformer';
-import { IsArray, IsInt, IsNotEmpty, IsString, IsUrl, Min } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsInt, IsNotEmpty, IsString, IsUrl, Min } from 'class-validator';
 
 export class SearchDevLinkQuery {
 	@Type(() => Number)
@@ -33,6 +33,7 @@ export class DevLinkDto {
 	public url: string;
 
 	@IsArray()
+	@ArrayNotEmpty()
 	@IsString({ each: true })
 	@Expose()
 	public tags: string[];
