@@ -1,7 +1,7 @@
 import { FastifyRequest } from 'fastify';
 
 export class LoginUser {
-	public idx: number;
+	public id: number;
 	public email: string;
 }
 
