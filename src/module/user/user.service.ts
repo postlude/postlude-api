@@ -2,7 +2,7 @@ import * as bcrypt from 'bcrypt';
 import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserRepository } from 'src/database/repository/user.repository';
-import { SignDto } from './user.dto';
+import { UserDto } from './user.dto';
 
 @Injectable()
 export class UserService {
@@ -17,7 +17,7 @@ export class UserService {
 	 * @description 유저 생성
 	 * @param param
 	 */
-	public async signUp(param: SignDto) {
+	public async signUp(param: UserDto) {
 		const { email, password } = param;
 
 		const isExist = !!(await this.userRepository.count({ email }));
@@ -32,24 +32,24 @@ export class UserService {
 			password: encryptedPassword
 		});
 
-		return identifiers[0].idx as number;
+		return identifiers[0].id as number;
 	}
 
 	/**
 	 * @description 로그인
 	 * @param param
 	 */
-	public async signIn(param: SignDto) {
+	public async signIn(param: UserDto) {
 		const { email, password: inputPassword } = param;
 
 		const user = await this.userRepository.findOne({ email });
 
 		if (user) {
-			const { idx, email, password } = user;
+			const { id, email, password } = user;
 
 			const isSame = await bcrypt.compare(inputPassword, password);
 			if (isSame) {
-				return this.jwtService.sign({ idx, email });
+				return this.jwtService.sign({ id, email });
 			}
 		}
 

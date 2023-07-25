@@ -2,10 +2,10 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { LoginUser } from '../auth/auth.model';
 import { AuthUser } from '../auth/decorator/auth.decorator';
 import { LoginRequired } from '../auth/guard/jwt.guard';
-import { SignDto } from './user.dto';
+import { UserDto } from './user.dto';
 import { UserService } from './user.service';
 
-@Controller('/user')
+@Controller('/users')
 export class UserController {
 	constructor(
 		private readonly userService: UserService
@@ -21,14 +21,14 @@ export class UserController {
 
 	@Post('/')
 	public async signUp(
-		@Body() param: SignDto
+		@Body() param: UserDto
 	) {
 		return await this.userService.signUp(param);
 	}
 
 	@Post('/sign-in')
 	public async signIn(
-		@Body() param: SignDto
+		@Body() param: UserDto
 	) {
 		return await this.userService.signIn(param);
 	}

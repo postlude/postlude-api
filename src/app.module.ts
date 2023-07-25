@@ -5,7 +5,6 @@ import { AppController } from './app.controller';
 import { DatbaseModule } from './database/database.module';
 import { AuthModule } from './module/auth/auth.module';
 import { DevLinkModule } from './module/dev-link/dev-link.module';
-import { ExecutionStatementModule } from './module/execution-statement/execution-statement.module';
 import { UserModule } from './module/user/user.module';
 
 @Module({
@@ -17,8 +16,7 @@ import { UserModule } from './module/user/user.module';
 		AuthModule,
 		DatbaseModule,
 		UserModule,
-		DevLinkModule,
-		ExecutionStatementModule
+		DevLinkModule
 	],
 	controllers: [AppController],
 	providers: [

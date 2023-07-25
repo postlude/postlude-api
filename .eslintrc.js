@@ -54,7 +54,7 @@ module.exports = {
 		'@typescript-eslint/no-floating-promises': 'off',
 
 		'no-unused-vars': 'off',
-  		'@typescript-eslint/no-unused-vars': ['error', { 'ignoreRestSiblings': true }],
+  		'@typescript-eslint/no-unused-vars': ['error', { 'ignoreRestSiblings': true, 'varsIgnorePattern': '^_' }],
 
 		'semi-spacing': ['error', { before: false, after: false }],
 		'block-spacing': 'error',

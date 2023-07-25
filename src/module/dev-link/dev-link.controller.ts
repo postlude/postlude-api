@@ -1,49 +1,42 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { LoginRequired } from '../auth/guard/jwt.guard';
-import { AddDevLinkDto, SearchDevLinkParam, SetDevLinkDto } from './dev-link.dto';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { DevLinkDto, SearchDevLinkQuery } from './dev-link.dto';
 import { DevLinkService } from './dev-link.service';
 
-@Controller('/dev-link')
+@Controller('/dev-links')
 export class DevLinkController {
 	constructor(
 		private readonly devLinkService: DevLinkService
 	) {}
 
-	@Get('/list')
-	public searchDevLink(
-		@Query() searchDevLinkParam: SearchDevLinkParam
+	@Get('/')
+	public async searchDevLink(
+		@Query() query: SearchDevLinkQuery
 	) {
-		return this.devLinkService.getDevLinkList(searchDevLinkParam);
-	}
-
-	@Get('/:idx')
-	public getDevLink(
-		@Param('idx', ParseIntPipe) devLinkIdx: number
-	) {
-		return this.devLinkService.getDevLink(devLinkIdx);
-	}
-
-	@Delete('/:idx')
-	@UseGuards(LoginRequired)
-	public removeDevLink(
-		@Param('idx', ParseIntPipe) devLinkIdx: number
-	) {
-		return this.devLinkService.removeDevLink(devLinkIdx);
+		return await this.devLinkService.search(query);
 	}
 
 	@Post('/')
-	@UseGuards(LoginRequired)
-	public addDevLink(
-		@Body() devLinkDto: AddDevLinkDto
+	// @UseGuards(LoginRequired)
+	public async addDevLink(
+		@Body() devLinkDto: DevLinkDto
 	) {
-		this.devLinkService.addDevLink(devLinkDto);
+		return await this.devLinkService.addDevLink(devLinkDto);
 	}
 
-	@Put('/')
-	@UseGuards(LoginRequired)
-	public setDevLink(
-		@Body() devLinkDto: SetDevLinkDto
+	@Put('/:id')
+	// @UseGuards(LoginRequired)
+	public async setDevLink(
+		@Param('id', ParseIntPipe) devLinkId: number,
+		@Body() devLinkDto: DevLinkDto
 	) {
-		this.devLinkService.setDevLink(devLinkDto);
+		await this.devLinkService.setDevLink(devLinkId, devLinkDto);
+	}
+
+	@Delete('/:id')
+	// @UseGuards(LoginRequired)
+	public async removeDevLink(
+		@Param('id', ParseIntPipe) devLinkId: number
+	) {
+		return await this.devLinkService.removeDevLink(devLinkId);
 	}
 }

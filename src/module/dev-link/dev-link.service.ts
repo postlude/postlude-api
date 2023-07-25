@@ -1,84 +1,67 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { plainToInstance } from 'class-transformer';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { DevLinkTagRepository } from '../../database/repository/dev-link-tag.repository';
 import { DevLinkRepository } from '../../database/repository/dev-link.repository';
-import { TagRepository } from '../../database/repository/tag.repository';
-import { AddDevLinkDto, SearchDevLinkParam, SetDevLinkDto } from './dev-link.dto';
-import { SearchType } from './dev-link.model';
+import { DevLinkDto, DevLinkInfo, SearchDevLinkQuery } from './dev-link.dto';
 
 @Injectable()
 export class DevLinkService {
 	constructor(
 		private readonly devLinkRepository: DevLinkRepository,
-		private readonly devLinkTagRepository: DevLinkTagRepository,
-		private readonly tagRepository: TagRepository
+		private readonly devLinkTagRepository: DevLinkTagRepository
 	) {}
 
 	/**
-	 * @description 개발 링크 1개 조회
-	 * @param devLinkIdx
-	 */
-	public async getDevLink(devLinkIdx: number) {
-		const devLinkInfo = await this.devLinkRepository.findOneByIdx(devLinkIdx);
-
-		if (devLinkInfo) {
-			const { tagList, ...devLink } = devLinkInfo;
-
-			return {
-				devLink,
-				tagList: tagList.map((t) => t.tag)
-			};
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * @description 개발 링크 검색
+	 * @description 개발 링크 검색(일단 단일 태그 검색만)
 	 * @param searchParam
 	 */
-	public async getDevLinkList(searchParam: SearchDevLinkParam) {
-		const { type, page, title, tagList }= searchParam;
+	public async search(searchParam: SearchDevLinkQuery) {
+		const { page, tagName }= searchParam;
 
 		const limit = 10;
 		const offset = (page - 1) * limit;
 
-		switch (type) {
-			case SearchType.Tag : {
-				const countList = await this.devLinkRepository.countByTag(tagList);
-				const totalCount = countList.length;
+		const totalCount = await this.devLinkRepository.countByTag(tagName);
 
-				if (totalCount) {
-					const devLinkList = await this.devLinkRepository.findByTag(tagList, limit, offset);
-					return { totalCount, devLinkList };
-				} else {
-					return { totalCount, devLinkList: null };
-				}
-			}
-			case SearchType.Title : {
-				const [devLinkList, totalCount] = await this.devLinkRepository.findByTitle(title, limit, offset);
-				return { totalCount, devLinkList: totalCount ? devLinkList : null };
-			}
+		if (totalCount) {
+			// 단일 태그 검색
+			const devLinkList = await this.devLinkRepository.findByTag(tagName, limit, offset);
+
+			// 해당 개발 링크의 모든 태그 조회
+			const promises = devLinkList.map(({ id }) => this.devLinkRepository.findTagsById(id));
+			const tagList = await Promise.all(promises);
+
+			const devLinks = devLinkList.map((devLink) => {
+				const dl = tagList.find((dl) => dl.id === devLink.id);
+				const tags = dl.devLinkTags.map(({ tag }) => tag);
+
+				return plainToInstance(DevLinkInfo, {
+					...devLink,
+					tags
+				}, {
+					excludeExtraneousValues: true
+				});
+			});
+
+			return { totalCount, devLinks };
+		} else {
+			return { totalCount, devLinks: null };
 		}
 	}
 
 	/**
-	 * @description 태그, 태그 연결 생성
-	 * @param devLinkIdx
-	 * @param tagList
+	 * @description 태그 bulk insert
+	 * @param devLinkId
+	 * @param tags
 	 */
-	private async saveTag(devLinkIdx: number, tagList: string[]) {
-		// bulk upsert tag
-		const tagEntityList = tagList.map((tag) => this.tagRepository.create({ tag }));
-		await this.tagRepository.upsert(tagEntityList, {
-			conflictPaths: ['tag'],
-			skipUpdateIfNoValuesChanged: true
-		});
-		const upsertedTagList = await this.tagRepository.findByTag(tagList);
+	private async saveTags(devLinkId: number, tags: string[]) {
+		// 공백 제거 후 중복 제거
+		const filtered = Array.from(new Set(tags.map((t) => t.trim())));
 
-		// bulk insert dev_link_tag
-		const devLinkTagList = upsertedTagList.map(({ idx }) => ({ devLinkIdx, tagIdx: idx }));
-		await this.devLinkTagRepository.insert(devLinkTagList);
+		// bulk insert
+		const devLinkTags = filtered.map((tag) => this.devLinkTagRepository.create({ devLinkId, tag }));
+		await this.devLinkTagRepository.insert(devLinkTags);
 	}
 
 	/**
@@ -86,13 +69,15 @@ export class DevLinkService {
 	 * @param devLinkDto
 	 */
 	@Transactional()
-	public async addDevLink(devLinkDto: AddDevLinkDto) {
-		const { title, url, tagList } = devLinkDto;
+	public async addDevLink(devLinkDto: Omit<DevLinkDto, 'id'>) {
+		const { title, url, tags } = devLinkDto;
 
 		const { identifiers } = await this.devLinkRepository.insert({ title, url });
-		const devLinkIdx = identifiers[0].idx as number;
+		const devLinkId = identifiers[0].id as number;
 
-		await this.saveTag(devLinkIdx, tagList);
+		await this.saveTags(devLinkId, tags);
+
+		return devLinkId;
 	}
 
 	/**
@@ -100,21 +85,26 @@ export class DevLinkService {
 	 * @param devLinkDto
 	 */
 	@Transactional()
-	public async setDevLink(devLinkDto: SetDevLinkDto) {
-		const { idx, title, url, tagList } = devLinkDto;
+	public async setDevLink(devLinkId: number, devLinkInfo: DevLinkDto) {
+		const { title, url, tags } = devLinkInfo;
 
-		await this.devLinkRepository.update(idx, { title, url });
-		await this.devLinkTagRepository.delete({ devLinkIdx: idx });
-		await this.saveTag(idx, tagList);
+		await this.devLinkRepository.update(devLinkId, { title, url });
+		await this.devLinkTagRepository.delete({ devLinkId });
+		await this.saveTags(devLinkId, tags);
 	}
 
 	/**
 	 * @description 개발 링크 삭제
-	 * @param devLinkIdx
+	 * @param devLinkId
 	 */
-	@Transactional()
-	public async removeDevLink(devLinkIdx: number) {
-		await this.devLinkTagRepository.delete({ devLinkIdx });
-		await this.devLinkRepository.delete(devLinkIdx);
+	public async removeDevLink(devLinkId: number) {
+		// dev_link_tag는 onDelete: 'CASCADE'로 삭제됨
+		const result = await this.devLinkRepository.delete(devLinkId);
+
+		if (!result.affected) {
+			throw new BadRequestException('not existed data');
+		}
+
+		return devLinkId;
 	}
 }
