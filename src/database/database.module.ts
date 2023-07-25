@@ -13,7 +13,6 @@ import { UserRepository } from './repository/user.repository';
 		TypeOrmModule.forRootAsync({
 			inject: [ConfigService],
 			useFactory: (configService: ConfigService<MySqlConfig>) => {
-				console.log('MYSQL_HOST', configService.get('MYSQL_HOST', { infer: true }));
 				return {
 					type: 'mysql',
 					host: configService.get('MYSQL_HOST', { infer: true }),
