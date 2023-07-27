@@ -1,8 +1,0 @@
-.git/
-.github/
-.gitignore
-
-express/
-Dockerfile
-README.md
-.eslintrc.js

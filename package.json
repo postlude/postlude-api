@@ -25,6 +25,8 @@
 		"@nestjs/common": "^9.4.2",
 		"@nestjs/config": "^2.3.2",
 		"@nestjs/core": "^9.4.2",
+		"@nestjs/platform-fastify": "^9.4.2",
+		"@nestjs/platform-express": "^10.1.2",
 		"@nestjs/jwt": "^10.0.3",
 		"@nestjs/passport": "^9.0.3",
 		"@nestjs/typeorm": "^8.0.3",
@@ -40,7 +42,6 @@
 		"typeorm-transactional-cls-hooked": "^0.1.21"
 	},
 	"devDependencies": {
-		"@nestjs/platform-fastify": "^9.4.2",
 		"@types/bcrypt": "^5.0.0",
 		"@types/node": "^20.2.5",
 		"@types/passport-jwt": "^3.0.8",
