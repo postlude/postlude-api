@@ -18,9 +18,9 @@ async function bootstrap() {
 
 	const port = 3000;
 
-	if (process.env.NODE_ENV !== 'production') {
-		app.enableCors();
-	}
+	app.enableCors({
+		origin: [/^localhost/, /postlude.me/]
+	});
 
 	await app.listen(port);
 
