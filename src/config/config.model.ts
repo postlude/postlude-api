@@ -9,3 +9,5 @@ export interface MySqlConfig {
 export interface JwtConfig {
 	JWT_SECRET: string
 }
+
+export const JwtExpiration = '1d';
