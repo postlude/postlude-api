@@ -11,7 +11,7 @@ import { UserRepository } from './repository/user.repository';
 @Module({
 	imports: [
 		TypeOrmModule.forRootAsync({
-			inject: [ConfigService],
+			inject: [ ConfigService ],
 			useFactory: (configService: ConfigService<MySqlConfig>) => {
 				return {
 					type: 'mysql',
@@ -20,7 +20,7 @@ import { UserRepository } from './repository/user.repository';
 					username: configService.get('MYSQL_USERNAME', { infer: true }),
 					password: configService.get('MYSQL_PASSWORD', { infer: true }),
 					database: configService.get('MYSQL_DATABASE', { infer: true }),
-					entities: [join(__dirname, '/**/*.entity.js')],
+					entities: [ join(__dirname, '/**/*.entity.js') ],
 					logging: true
 					// synchronize: false,
 				};
@@ -32,6 +32,6 @@ import { UserRepository } from './repository/user.repository';
 			DevLinkTagRepository
 		])
 	],
-	exports: [TypeOrmModule]
+	exports: [ TypeOrmModule ]
 })
 export class DatbaseModule {}

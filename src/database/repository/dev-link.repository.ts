@@ -34,7 +34,7 @@ export class DevLinkRepository extends BaseRepository<DevLink> {
 
 	public async findTagsById(devLinkId: number) {
 		return await this.createQueryBuilder('dl')
-			.select(['dl.id', 'dlt.tag'])
+			.select([ 'dl.id', 'dlt.tag' ])
 			.innerJoin('dl.devLinkTags', 'dlt')
 			.where('dl.id = :devLinkId', { devLinkId })
 			.getOne();
