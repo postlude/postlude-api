@@ -61,7 +61,7 @@ module.exports = {
 		'no-whitespace-before-property': 'error',
 		'keyword-spacing': ['error', { before: true }],
 		'object-curly-spacing': ['error', 'always'],
-		'array-bracket-spacing': ['error', 'never'],
+		'array-bracket-spacing': ['error', 'always'],
 		'key-spacing': ['error', { beforeColon: false, afterColon: true }],
 		'no-trailing-spaces': 'error',
 		'no-multi-spaces': 'error',
