@@ -6,6 +6,7 @@ import { MySqlConfig } from 'src/config/config.model';
 import { DevLinkTagRepository } from './repository/dev-link-tag.repository';
 import { DevLinkRepository } from './repository/dev-link.repository';
 import { UserRepository } from './repository/user.repository';
+import { TagRepository } from './repository/tag.repository';
 
 @Global()
 @Module({
@@ -29,7 +30,8 @@ import { UserRepository } from './repository/user.repository';
 		TypeOrmModule.forFeature([
 			UserRepository,
 			DevLinkRepository,
-			DevLinkTagRepository
+			DevLinkTagRepository,
+			TagRepository
 		])
 	],
 	exports: [ TypeOrmModule ]

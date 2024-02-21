@@ -107,4 +107,8 @@ export class DevLinkService {
 
 		return devLinkId;
 	}
+
+	public async getAllTags() {
+		return await this.tagRepository.findAllDevLinkTags();
+	}
 }

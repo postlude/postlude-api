@@ -24,6 +24,11 @@ export class DevLinkController {
 		return await this.devLinkService.addDevLink(devLinkDto);
 	}
 
+	@Get('/tags')
+	public async getAllDevLinkTags() {
+		return await this.devLinkService.getAllTags();
+	}
+
 	@Put('/:id')
 	@UseGuards(LoginRequired)
 	public async setDevLink(
