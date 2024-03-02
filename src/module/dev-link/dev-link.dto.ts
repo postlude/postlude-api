@@ -13,7 +13,7 @@ export class SearchDevLinkQuery {
 	public searchWord: string;
 }
 
-class TagDto {
+export class TagDto {
 	@IsOptional()
 	@IsInt()
 	@Min(1)
