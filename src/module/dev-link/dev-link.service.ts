@@ -89,7 +89,7 @@ export class DevLinkService {
 	}
 
 	public async removeDevLink(devLinkId: number) {
-		// dev_link_tag는 onDelete: 'CASCADE'로 삭제됨
+		// dev_link_tag는 DB 테이블의 ON DELETE CASCADE 로 삭제됨
 		const result = await this.devLinkRepository.delete(devLinkId);
 
 		if (!result.affected) {
