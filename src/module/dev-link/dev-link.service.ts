@@ -79,23 +79,15 @@ export class DevLinkService {
 		return devLinkId;
 	}
 
-	/**
-	 * @description 개발 링크 수정
-	 * @param devLinkDto
-	 */
 	@Transactional()
-	public async setDevLink(devLinkId: number, devLinkInfo: DevLinkDto) {
-		const { title, url, tags } = devLinkInfo;
+	public async setDevLink(devLinkId: number, devLinkDto: DevLinkDto) {
+		const { title, url, tags } = devLinkDto;
 
 		await this.devLinkRepository.update(devLinkId, { title, url });
 		await this.devLinkTagRepository.delete({ devLinkId });
 		await this.saveTags(devLinkId, tags);
 	}
 
-	/**
-	 * @description 개발 링크 삭제
-	 * @param devLinkId
-	 */
 	public async removeDevLink(devLinkId: number) {
 		// dev_link_tag는 onDelete: 'CASCADE'로 삭제됨
 		const result = await this.devLinkRepository.delete(devLinkId);
