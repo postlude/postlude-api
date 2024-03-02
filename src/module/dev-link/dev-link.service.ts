@@ -111,4 +111,14 @@ export class DevLinkService {
 	public async getAllTags() {
 		return await this.tagRepository.findAllDevLinkTags();
 	}
+
+	public async getDevLink(devLinkId: number) {
+		const fetched = await this.devLinkRepository.findOne(devLinkId, { relations: [ 'tags' ] });
+
+		if (!fetched) {
+			return null;
+		}
+
+		return plainToInstance(DevLinkDto, fetched, { excludeExtraneousValues: true });
+	}
 }

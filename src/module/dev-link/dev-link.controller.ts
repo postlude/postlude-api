@@ -29,6 +29,13 @@ export class DevLinkController {
 		return await this.devLinkService.getAllTags();
 	}
 
+	@Get('/:id')
+	public async getDevLink(
+		@Param('id', ParseIntPipe) devLinkId: number
+	) {
+		return await this.devLinkService.getDevLink(devLinkId);
+	}
+
 	@Put('/:id')
 	@UseGuards(LoginRequired)
 	public async setDevLink(
