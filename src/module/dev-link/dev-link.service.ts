@@ -47,7 +47,20 @@ export class DevLinkService {
 			return { totalCount, devLinks };
 		} else {
 			return { totalCount, devLinks: null };
+	}
+
+	private async searchByTagNames(tagNames: string[], limit: number, offset: number) {
+		const totalCount = await this.devLinkRepository.countByTagNames(tagNames);
+
+		if (!totalCount) {
+			return { totalCount, devLinks: [] };
 		}
+
+		const fetched = await this.devLinkRepository.findByTagNames(tagNames, limit, offset);
+
+		const devLinks = plainToInstance(SearchDevLinkDto, fetched, { excludeExtraneousValues: true });
+
+		return { totalCount, devLinks };
 	}
 
 	private async saveTags(devLinkId: number, tags: TagDto[]) {

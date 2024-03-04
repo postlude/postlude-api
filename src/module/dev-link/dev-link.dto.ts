@@ -50,3 +50,13 @@ export class DevLinkDto {
 	public tags: TagDto[];
 }
 
+export class SearchDevLinkDto {
+	@Expose()
+	public id: number;
+
+	@Expose()
+	public title: string;
+
+	@Expose()
+	public url: string;
+}
