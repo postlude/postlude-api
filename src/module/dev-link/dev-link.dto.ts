@@ -1,16 +1,28 @@
 import { Expose, Type } from 'class-transformer';
-import { ArrayNotEmpty, IsArray, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl, MaxLength, Min } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl, MaxLength, Min } from 'class-validator';
+import { SearchType } from './dev-link.model';
+import { FromSingleToArray } from 'src/decorator/FromSingleToArray';
 
 export class SearchDevLinkQuery {
+	@Type(() => Number)
+	@IsEnum(SearchType)
+	public searchType: SearchType;
+
 	@Type(() => Number)
 	@IsInt()
 	@Min(1)
 	public page: number;
 
+	@IsOptional()
 	@IsString()
 	@IsNotEmpty()
 	@MaxLength(100)
-	public searchWord: string;
+	public title?: string;
+
+	@IsOptional()
+	@FromSingleToArray()
+	@IsString({ each: true })
+	public tagNames?: string[];
 }
 
 export class TagDto {
