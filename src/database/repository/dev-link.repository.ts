@@ -30,34 +30,26 @@ export class DevLinkRepository extends BaseRepository<DevLink> {
 			.offset(offset)
 			.getMany();
 	}
-		return await this.createQueryBuilder('dl')
-			.innerJoin('dl.devLinkTags', 'dlt')
-			.where('dlt.tag = :tag', { tag })
+
+	private titleSearchBuilder(title: string) {
+		const booleanModeTitle = `${title}*`;
+
+		return this.createQueryBuilder('dl')
+			.where('MATCH(dl.title) AGAINST (:booleanModeTitle IN BOOLEAN MODE)', { booleanModeTitle });
+	}
+
+	public async countByTitle(title: string) {
+		return await this.titleSearchBuilder(title)
+			.comment('DevLinkRepository.countByTitle')
 			.getCount();
 	}
 
-	/**
-	 * @description 단일 태그 검색 조회
-	 * @param tagList
-	 * @param limit
-	 * @param offset
-	 */
-	public async findByTag(tag: string, limit: number, offset: number) {
-		return await this.createQueryBuilder('dl')
-			.select(['dl.id', 'dl.title', 'dl.url'])
-			.innerJoin('dl.devLinkTags', 'dlt')
-			.where('dlt.tag = :tag', { tag: tag })
-			.orderBy('dl.id', 'DESC')
+	public async findByTitle(title: string, limit: number, offset: number) {
+		return await this.titleSearchBuilder(title)
+			.comment('DevLinkRepository.findByTitle')
+			.select([ 'dl.id', 'dl.title', 'dl.url' ])
 			.limit(limit)
 			.offset(offset)
 			.getMany();
-	}
-
-	public async findTagsById(devLinkId: number) {
-		return await this.createQueryBuilder('dl')
-			.select([ 'dl.id', 'dlt.tag' ])
-			.innerJoin('dl.devLinkTags', 'dlt')
-			.where('dl.id = :devLinkId', { devLinkId })
-			.getOne();
 	}
 }
