@@ -39,12 +39,6 @@ export class TagDto {
 }
 
 export class DevLinkDto {
-	@IsOptional()
-	@IsInt()
-	@Min(1)
-	@Expose()
-	public id?: number;
-
 	@IsString()
 	@IsNotEmpty()
 	@Expose()
