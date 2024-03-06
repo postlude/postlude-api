@@ -7,9 +7,7 @@ import { JwtPayload } from '../auth.model';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-	constructor(
-		private readonly configService: ConfigService<JwtConfig>
-	) {
+	constructor(configService: ConfigService<JwtConfig>) {
 		const secretOrKey = configService.get('JWT_SECRET', { infer: true });
 
 		super({
