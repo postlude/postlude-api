@@ -39,6 +39,12 @@ export class TagDto {
 }
 
 export class DevLinkDto {
+	@IsOptional()
+	@IsInt()
+	@Min(1)
+	@Expose()
+	public id?: number;
+
 	@IsString()
 	@IsNotEmpty()
 	@Expose()
@@ -49,6 +55,7 @@ export class DevLinkDto {
 	@Expose()
 	public url: string;
 
+	@IsOptional()
 	@IsArray()
 	@ArrayNotEmpty()
 	@Type(() => TagDto)
