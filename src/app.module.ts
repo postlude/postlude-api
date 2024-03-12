@@ -10,7 +10,7 @@ import { UserModule } from './module/user/user.module';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
-			envFilePath: ['src/config/local.env'],
+			envFilePath: [ 'src/config/local.env' ],
 			isGlobal: true
 		}),
 		AuthModule,
@@ -18,7 +18,7 @@ import { UserModule } from './module/user/user.module';
 		UserModule,
 		DevLinkModule
 	],
-	controllers: [AppController],
+	controllers: [ AppController ],
 	providers: [
 		// DTO에서 class-validator 사용하기 위해 필요
 		{

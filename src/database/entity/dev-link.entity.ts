@@ -1,5 +1,5 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { DevLinkTag } from './dev-link-tag.entity';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Tag } from './tag.entity';
 
 @Entity({ database: 'postlude', name: 'dev_link' })
 export class DevLink {
@@ -18,6 +18,11 @@ export class DevLink {
 	@Column({ type: 'datetime', name: 'updated_at' })
 	updatedAt: Date;
 
-	@OneToMany(() => DevLinkTag, (devLinkTag) => devLinkTag.devLink)
-	devLinkTags: DevLinkTag[];
+	@ManyToMany(() => Tag, (tag) => tag.devLinks)
+	@JoinTable({
+		name: 'dev_link_tag',
+		joinColumn: { name: 'dev_link_id', referencedColumnName: 'id' },
+		inverseJoinColumn: { name: 'tag_id', referencedColumnName: 'id' }
+	})
+	tags: Tag[];
 }
