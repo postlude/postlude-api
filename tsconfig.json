@@ -1,6 +1,8 @@
 {
 	// https://www.typescriptlang.org/tsconfig
-	"include": [ "src/**/*" ],
+	"include": [
+		"src/**/*"
+	],
 	"compilerOptions": {
 		"module": "commonjs",
 		"target": "es2017",
@@ -11,7 +13,8 @@
 		"noImplicitAny": true,
 		"allowUnreachableCode": false,
 		"emitDecoratorMetadata": true, // @Injectable()을 사용해 DI를 사용하기 위해서 필요
-		// "strict": true,
+		"strict": true,
+		"strictPropertyInitialization": false
 		//   "declaration": true,
 		//   "allowSyntheticDefaultImports": true,
 		//   "sourceMap": true,

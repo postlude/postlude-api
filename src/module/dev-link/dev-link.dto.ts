@@ -1,27 +1,50 @@
 import { Expose, Type } from 'class-transformer';
-import { ArrayNotEmpty, IsArray, IsInt, IsNotEmpty, IsString, IsUrl, Min } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl, MaxLength, Min } from 'class-validator';
+import { SearchType } from './dev-link.model';
+import { FromSingleToArray } from 'src/decorator/FromSingleToArray';
 
 export class SearchDevLinkQuery {
+	@Type(() => Number)
+	@IsEnum(SearchType)
+	public searchType: SearchType;
+
 	@Type(() => Number)
 	@IsInt()
 	@Min(1)
 	public page: number;
 
+	@IsOptional()
 	@IsString()
 	@IsNotEmpty()
-	public tagName: string;
+	@MaxLength(100)
+	public title?: string;
 
-	// @IsOptional()
-	// @MinLength(2)
-	// public title?: string;
+	@IsOptional()
+	@FromSingleToArray()
+	@IsString({ each: true })
+	public tagNames?: string[];
+}
 
-	// @IsOptional()
-	// @Transform(({ value }) => (value as string).split(','))
-	// @IsArray()
-	// public tagList?: string[];
+export class TagDto {
+	@IsOptional()
+	@IsInt()
+	@Min(1)
+	@Expose()
+	public id?: number;
+
+	@IsString()
+	@IsNotEmpty()
+	@Expose()
+	public name: string;
 }
 
 export class DevLinkDto {
+	@IsOptional()
+	@IsInt()
+	@Min(1)
+	@Expose()
+	public id?: number;
+
 	@IsString()
 	@IsNotEmpty()
 	@Expose()
@@ -32,16 +55,21 @@ export class DevLinkDto {
 	@Expose()
 	public url: string;
 
+	@IsOptional()
 	@IsArray()
 	@ArrayNotEmpty()
-	@IsString({ each: true })
+	@Type(() => TagDto)
 	@Expose()
-	public tags: string[];
+	public tags: TagDto[];
 }
 
-export class DevLinkInfo extends DevLinkDto {
-	@IsInt()
-	@Min(1)
+export class SearchDevLinkDto {
 	@Expose()
 	public id: number;
+
+	@Expose()
+	public title: string;
+
+	@Expose()
+	public url: string;
 }
