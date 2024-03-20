@@ -11,6 +11,7 @@ export class TagRepository extends BaseRepository<Tag> {
 			.innerJoin('t.devLinks', 'dl')
 			.groupBy('t.id')
 			.orderBy('cnt', 'DESC')
+			.addOrderBy('t.name', 'ASC')
 			.getRawMany<{ name: string, cnt: number }>();
 	}
 }
