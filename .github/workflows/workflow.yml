@@ -5,7 +5,7 @@ on:
     branches: [master]
 
 jobs:
-  postlude-api-build:
+  postlude-api-deploy:
     runs-on: ubuntu-latest
     steps:
     - name: Source Code Checkout
@@ -25,3 +25,12 @@ jobs:
         file: ./build/Dockerfile
         push: true
         tags: ghcr.io/${{ github.repository_owner }}/postlude-api:prod
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+    - name: Force update ECS Service
+      run: |
+       aws ecs update-service --cluster postlude-api --service postlude-api-svc --force-new-deployment
